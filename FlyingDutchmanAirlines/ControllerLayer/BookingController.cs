@@ -12,6 +12,7 @@ using FlyingDutchmanAirlines.Views;
 namespace FlyingDutchmanAirlines.ControllerLayer;
 
 [Route("[controller]")]
+[Produces("application/json")]
 public class BookingController : ControllerBase
 {
   private BookingService _bookingService;

@@ -11,6 +11,7 @@ using FlyingDutchmanAirlines.Exceptions;
 namespace FlyingDutchmanAirlines.ControllerLayer;
 
 [Route("[controller]")]
+[Produces("application/json")]
 public class FlightController : ControllerBase
 {
   private readonly FlightService _service;
