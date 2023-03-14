@@ -28,7 +28,7 @@ public class AirportRepository
 
   public virtual async Task<Airport> GetAirportByID(int airportID)
   {
-    if (!airportID.IsPositive())
+    if (int.IsNegative(airportID))
     {
       Console.WriteLine($"Argument Exception in GetAirpotByID! Airport ID = {airportID}");
       throw new ArgumentException("Invalid argument provided");

@@ -21,7 +21,7 @@ public class BookingService
 
   public async Task<(bool, Exception?)> CreateBooking(string customerName, int flightNumber)
   {
-    if (string.IsNullOrWhiteSpace(customerName) || !flightNumber.IsPositive())
+    if (string.IsNullOrWhiteSpace(customerName) || int.IsNegative(flightNumber))
     {
       return (false, new ArgumentException("Invalid flight number or empty username provided"));
     }

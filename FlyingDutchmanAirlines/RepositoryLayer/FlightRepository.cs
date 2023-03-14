@@ -28,7 +28,7 @@ public class FlightRepository
 
   public virtual async Task<Flight> GetFlightByFlightNumber(int flightNumber)
   {
-    if (!flightNumber.IsPositive())
+    if (int.IsNegative(flightNumber))
     {
       Console.WriteLine($"Could not find flight in GetFlightByFlightNumber! flightNumber = {flightNumber}");
       throw new FlightNotFoundException();
