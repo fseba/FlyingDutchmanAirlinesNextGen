@@ -55,7 +55,7 @@ public class FlightController : ControllerBase
   {
     try
     {
-      if (int.IsNegative(flightNumber))
+      if (!ModelState.IsValid || int.IsNegative(flightNumber))
       {
         throw new Exception();
       }
