@@ -12,10 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("FlyingDutchmanDatabase");
+//var connectionString = builder.Configuration.GetConnectionString("FlyingDutchmanDatabase");
+var connectionStringLocal = builder.Configuration.GetConnectionString("FlyingDutchmanDatabase_local");
 
 builder.Services
-  .AddDbContext<FlyingDutchmanAirlinesContext>(options => options.UseSqlServer(connectionString))
+  .AddDbContext<FlyingDutchmanAirlinesContext>(options => options.UseSqlServer(connectionStringLocal))
   //.AddTransient<FlyingDutchmanAirlinesContext, FlyingDutchmanAirlinesContext>()
   .AddTransient<FlightService, FlightService>()
   .AddTransient<BookingService, BookingService>()
