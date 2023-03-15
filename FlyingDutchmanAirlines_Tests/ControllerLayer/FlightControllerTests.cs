@@ -19,8 +19,8 @@ public class FlightControllerTests
 
     List<FlightView> returnFlightViews = new(2)
     {
-      new FlightView("1932", ("Groningen", "GRQ"), ("Phoenix", "PHX")),
-      new FlightView("841", ("New York City", "JFK"), ("London", "LHR"))
+      new FlightView(1932, ("Groningen", "GRQ"), ("Phoenix", "PHX")),
+      new FlightView(841, ("New York City", "JFK"), ("London", "LHR"))
     };
 
     mockService
@@ -91,7 +91,7 @@ public class FlightControllerTests
   {
     Mock<FlightService> mockService = new();
 
-    FlightView returnedFlightView = new("0", ("Lagos", "LOS"), ("Marrakesh", "RAK"));
+    FlightView returnedFlightView = new(0, ("Lagos", "LOS"), ("Marrakesh", "RAK"));
 
     mockService
       .Setup(s => s.GetFlightByFlightNumber(0))

@@ -65,7 +65,7 @@ public class FlightServiceTests
     await foreach (FlightView flightView in service.GetFlights())
     {
       Assert.IsNotNull(flightView);
-      Assert.AreEqual(flightView.FlightNumber, "148");
+      Assert.AreEqual(flightView.FlightNumber, 148);
       Assert.AreEqual(flightView.Origin.City, "Mexico City");
       Assert.AreEqual(flightView.Origin.Code, "MEX");
       Assert.AreEqual(flightView.Destination.City, "Ulaanbaataar");
@@ -113,7 +113,7 @@ public class FlightServiceTests
     FlightView flightView = await service.GetFlightByFlightNumber(148);
 
     Assert.IsNotNull(flightView);
-    Assert.AreEqual(flightView.FlightNumber, "148");
+    Assert.AreEqual(flightView.FlightNumber, 148);
     Assert.AreEqual(flightView.Origin.City, "Mexico City");
     Assert.AreEqual(flightView.Origin.Code, "MEX");
     Assert.AreEqual(flightView.Destination.City, "Ulaanbaataar");

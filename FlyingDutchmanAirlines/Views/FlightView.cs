@@ -3,13 +3,13 @@ namespace FlyingDutchmanAirlines.Views;
 
 public class FlightView
 {
-  public string FlightNumber { get; private set; }
+  public int FlightNumber { get; private set; }
   public AirportInfo Origin { get; private set; }
   public AirportInfo Destination { get; private set; }
 
-  public FlightView(string flightNumber, (string city, string code) origin, (string city, string code) destination)
+  public FlightView(int flightNumber, (string city, string code) origin, (string city, string code) destination)
   {
-    FlightNumber = string.IsNullOrWhiteSpace(flightNumber) ? "No flight number found" : flightNumber;
+    FlightNumber = int.IsPositive(flightNumber) ? flightNumber : throw new ArgumentException("Invalid flight number");
 
     Origin = new AirportInfo(origin);
     Destination = new AirportInfo(destination);

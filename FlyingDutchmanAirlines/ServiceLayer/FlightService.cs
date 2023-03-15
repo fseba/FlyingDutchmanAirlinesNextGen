@@ -51,7 +51,7 @@ public class FlightService
         throw new ArgumentException($"{ex.Message}", ex.InnerException);
       }
 
-      yield return new FlightView(flight.FlightNumber.ToString(),
+      yield return new FlightView(flight.FlightNumber,
                                  (originAirport.City, originAirport.Iata),
                                  (destinationAirport.City, destinationAirport.Iata));
     }
@@ -66,7 +66,7 @@ public class FlightService
       Airport destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
 
       return new FlightView
-        (flight.FlightNumber.ToString(),
+        (flight.FlightNumber,
         (originAirport.City, originAirport.Iata),
         (destinationAirport.City, destinationAirport.Iata));
     }

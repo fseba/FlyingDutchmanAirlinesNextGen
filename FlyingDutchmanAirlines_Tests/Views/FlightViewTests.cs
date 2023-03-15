@@ -9,7 +9,7 @@ public class FlightViewTests
   [TestMethod]
   public void Constructor_FlightView_Success()
   {
-    string flightNumber = "0";
+    int flightNumber = 0;
     string originCity = "Amsterdam";
     string originCityCode = "AMS";
     string destinationCity = "Moscow";
@@ -26,17 +26,17 @@ public class FlightViewTests
   }
 
   [TestMethod]
-  public void Constructor_FlightView_Success_FlightNumber_Null()
+  [ExpectedException(typeof(ArgumentException))]
+  public void Constructor_FlightView_Success_FlightNumber_Negative()
   {
     string originCity = "Athens";
     string originCityCode = "ATH";
     string destinationCity = "Dubai";
     string destinationCityCode = "DXB";
 
-    FlightView view = new (null!, (originCity, originCityCode), (destinationCity, destinationCityCode));
+    FlightView view = new (-1, (originCity, originCityCode), (destinationCity, destinationCityCode));
 
     Assert.IsNotNull(view);
-    Assert.AreEqual(view.FlightNumber, "No flight number found");
     Assert.AreEqual(view.Origin.City, originCity);
     Assert.AreEqual(view.Destination.City, destinationCity);
   }
