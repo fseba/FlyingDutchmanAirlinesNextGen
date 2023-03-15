@@ -9,8 +9,7 @@ public class FlightView
 
   public FlightView(int flightNumber, (string city, string code) origin, (string city, string code) destination)
   {
-    FlightNumber = int.IsPositive(flightNumber) ? flightNumber : throw new ArgumentException("Invalid flight number");
-
+    FlightNumber = flightNumber;
     Origin = new AirportInfo(origin);
     Destination = new AirportInfo(destination);
   }

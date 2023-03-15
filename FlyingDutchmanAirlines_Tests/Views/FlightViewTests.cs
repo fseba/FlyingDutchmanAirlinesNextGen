@@ -26,23 +26,7 @@ public class FlightViewTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(ArgumentException))]
-  public void Constructor_FlightView_Success_FlightNumber_Negative()
-  {
-    string originCity = "Athens";
-    string originCityCode = "ATH";
-    string destinationCity = "Dubai";
-    string destinationCityCode = "DXB";
-
-    FlightView view = new (-1, (originCity, originCityCode), (destinationCity, destinationCityCode));
-
-    Assert.IsNotNull(view);
-    Assert.AreEqual(view.Origin.City, originCity);
-    Assert.AreEqual(view.Destination.City, destinationCity);
-  }
-
-  [TestMethod]
-  public void Constructor_AirportInfo_Success_City_EmptyString()
+  public void Constructor_AirportInfo_Failure_City_EmptyString()
   {
     string destinationCity = string.Empty;
     string destinationCityCode = "SYD";
@@ -55,7 +39,7 @@ public class FlightViewTests
   }
 
   [TestMethod]
-  public void Constructor_AirportInfo_Success_Code_EmptyString()
+  public void Constructor_AirportInfo_Failure_Code_EmptyString()
   {
     string destinationCity = "Ushuaia";
     string destinationCityCode = string.Empty;
