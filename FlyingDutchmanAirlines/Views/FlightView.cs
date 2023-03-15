@@ -1,5 +1,4 @@
-﻿using System;
-namespace FlyingDutchmanAirlines.Views;
+﻿namespace FlyingDutchmanAirlines.Views;
 
 public class FlightView
 {

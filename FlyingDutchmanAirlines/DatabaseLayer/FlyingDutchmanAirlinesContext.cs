@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using Microsoft.AspNetCore.Hosting.Server;
+﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace FlyingDutchmanAirlines.DatabaseLayer;
 

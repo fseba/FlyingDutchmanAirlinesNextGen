@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿namespace FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 public sealed class Booking
 {
