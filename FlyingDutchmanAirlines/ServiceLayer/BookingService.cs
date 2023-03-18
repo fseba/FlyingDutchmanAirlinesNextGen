@@ -44,6 +44,25 @@ public class BookingService
     }
   }
 
+  public async Task<(bool, Exception?)> DeleteBooking(int bookingId)
+  {
+    if (int.IsNegative(bookingId))
+    {
+      return (false, new ArgumentException("Invalid booking id - Is negative"));
+    }
+
+    try
+    {
+      await _bookingRepository.DeleteBooking(bookingId);
+
+      return (true, null);
+    }
+    catch (Exception ex)
+    {
+      return (false, ex);
+    }
+  }
+
   private async Task<bool> FlightExistsInDatabase(int flightNumber)
   {
     try
