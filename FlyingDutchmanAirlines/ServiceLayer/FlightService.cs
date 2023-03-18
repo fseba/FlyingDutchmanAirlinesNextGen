@@ -30,7 +30,7 @@ public class FlightService
 
   public virtual async IAsyncEnumerable<FlightView> GetFlights()
   {
-    Queue<Flight> flights = await _flightRepository.GetFlights();
+    Flight[] flights = await _flightRepository.GetFlights();
 
     foreach (Flight flight in flights)
     {

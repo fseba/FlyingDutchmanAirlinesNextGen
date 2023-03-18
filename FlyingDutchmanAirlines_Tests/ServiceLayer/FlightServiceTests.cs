@@ -27,8 +27,7 @@ public class FlightServiceTests
       Destination = 92
     };
 
-    Queue<Flight> mockReturn = new(1);
-    mockReturn.Enqueue(flightInDatabase);
+    Flight[] mockReturn = { flightInDatabase };
 
     _mockFlightRepository
       .Setup(repository => repository.GetFlights())

@@ -77,15 +77,15 @@ public class FlightRepositoryTests
   [TestMethod]
   public async Task GetFlights_Success()
   {
-    Queue<Flight> flights = await _repository.GetFlights();
+    Flight[] flights = await _repository.GetFlights();
     Assert.IsNotNull(flights);
 
     Flight dbFlight = _context.Flights.First(f => f.FlightNumber == 1);
     Assert.IsNotNull(dbFlight);
 
-    Assert.AreEqual(dbFlight.FlightNumber, flights.Peek().FlightNumber);
-    Assert.AreEqual(dbFlight.Origin, flights.Peek().Origin);
-    Assert.AreEqual(dbFlight.Destination, flights.Peek().Destination);
+    Assert.AreEqual(dbFlight.FlightNumber, flights.First().FlightNumber);
+    Assert.AreEqual(dbFlight.Origin, flights.First().Origin);
+    Assert.AreEqual(dbFlight.Destination, flights.First().Destination);
   }
 
   [TestMethod]
@@ -100,7 +100,7 @@ public class FlightRepositoryTests
     FlightRepository repository = new(context);
     Assert.IsNotNull(repository);
 
-    Queue<Flight> flights = await repository.GetFlights();
+    Flight[] flights = await repository.GetFlights();
   }
 }
 

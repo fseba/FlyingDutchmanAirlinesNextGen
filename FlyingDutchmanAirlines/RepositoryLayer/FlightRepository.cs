@@ -38,7 +38,7 @@ public class FlightRepository
       ?? throw new FlightNotFoundException();
   }
 
-  public virtual async Task<Queue<Flight>> GetFlights()
+  public virtual async Task<Flight[]> GetFlights()
   {
     if (!_context.Flights.Any())
     {
@@ -48,11 +48,7 @@ public class FlightRepository
 
     try
     {
-      Queue<Flight> flights = new();
-
-      await _context.Flights.ForEachAsync(f => flights.Enqueue(f));
-
-      return flights;
+      return await _context.Flights.ToArrayAsync();
     }
     catch (Exception)
     {
