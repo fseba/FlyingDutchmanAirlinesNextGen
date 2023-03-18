@@ -49,7 +49,7 @@ public class BookingRepository
     catch (Exception ex)
     {
       Console.WriteLine($"Exception during database query: {ex.Message}");
-      throw new CouldNotAddBookingToDatabaseException($"Exception during database query: {ex.Message}", ex);
+      throw new CouldNotAddBookingToDatabaseException($"Exception during database query: {ex.Message}", ex.InnerException!);
     }
   }
 
@@ -63,7 +63,8 @@ public class BookingRepository
         throw new BookingNotFoundException();
       }
 
-      return await _context.Bookings.FindAsync(bookingId) ?? throw new BookingNotFoundException();
+      return await _context.Bookings.FindAsync(bookingId)
+          ?? throw new BookingNotFoundException();
     }
     catch (Exception)
     {
