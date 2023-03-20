@@ -9,11 +9,11 @@ namespace FlyingDutchmanAirlines.ControllerLayer;
 
 [Route("[controller]")]
 [Produces("application/json")]
-public class FlightController : ControllerBase
+public class FlightsController : ControllerBase
 {
   private readonly FlightService _service;
 
-  public FlightController(FlightService service)
+  public FlightsController(FlightService service)
   {
     _service = service;
   }
