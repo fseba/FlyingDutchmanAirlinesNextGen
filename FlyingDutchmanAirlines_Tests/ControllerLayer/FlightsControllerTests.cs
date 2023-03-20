@@ -10,7 +10,7 @@ using Moq;
 namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 
 [TestClass]
-public class FlightControllerTests
+public class FlightsControllerTests
 {
   [TestMethod]
   public async Task GetFlights_Success()
@@ -27,7 +27,7 @@ public class FlightControllerTests
       .Setup(s => s.GetFlights())
       .Returns(FlightViewAsyncGenerator(returnFlightViews));
 
-    FlightController controller = new(mockService.Object);
+    FlightsController controller = new(mockService.Object);
 
     ObjectResult? response = await controller.GetFlights() as ObjectResult;
 
@@ -59,7 +59,7 @@ public class FlightControllerTests
       .Setup(s => s.GetFlights())
       .Throws(new FlightNotFoundException());
 
-    FlightController controller = new(mockService.Object);
+    FlightsController controller = new(mockService.Object);
 
     ObjectResult? response = await controller.GetFlights() as ObjectResult;
 
@@ -77,7 +77,7 @@ public class FlightControllerTests
       .Setup(s => s.GetFlights())
       .Throws(new ArgumentException());
 
-    FlightController controller = new(mockService.Object);
+    FlightsController controller = new(mockService.Object);
 
     ObjectResult? response = await controller.GetFlights() as ObjectResult;
 
@@ -97,7 +97,7 @@ public class FlightControllerTests
       .Setup(s => s.GetFlightByFlightNumber(0))
       .ReturnsAsync(returnedFlightView);
 
-    FlightController controller = new(mockService.Object);
+    FlightsController controller = new(mockService.Object);
 
     ObjectResult? response = await controller.GetFlightByFlightNumber(0) as ObjectResult;
     Assert.IsNotNull(response);
@@ -118,7 +118,7 @@ public class FlightControllerTests
       .Setup(s => s.GetFlightByFlightNumber(0))
       .Throws(new FlightNotFoundException());
 
-    FlightController controller = new(mockService.Object);
+    FlightsController controller = new(mockService.Object);
 
     ObjectResult? response = await controller.GetFlightByFlightNumber(0) as ObjectResult;
 
@@ -138,7 +138,7 @@ public class FlightControllerTests
       .Setup(s => s.GetFlightByFlightNumber(1))
       .Throws(new ArgumentException());
 
-    FlightController controller = new(mockService.Object);
+    FlightsController controller = new(mockService.Object);
 
     ObjectResult? response = await controller.GetFlightByFlightNumber(flightNumber) as ObjectResult;
 
