@@ -53,7 +53,7 @@ public class BookingRepository
     }
   }
 
-  public async Task<Booking> GetBookingById(int bookingId)
+  public virtual async Task<Booking> GetBookingById(int bookingId)
   {
     try
     {
