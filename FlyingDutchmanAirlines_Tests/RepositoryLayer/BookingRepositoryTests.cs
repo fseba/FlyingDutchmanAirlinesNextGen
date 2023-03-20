@@ -91,35 +91,19 @@ public class BookingRepositoryTests
   }
 
   [TestMethod]
-  public async Task GetBookingsByCustomerId_Success()
+  [ExpectedException(typeof(BookingNotFoundException))]
+  public async Task GetBookingById_Failure_BookingNotFoundException_NoBookingsInDatabase()
   {
-    await _repository.CreateBooking(1, 0);
-    await _repository.CreateBooking(1, 1);
-    await _repository.CreateBooking(1, 2);
-    int bookingsCount = _context.Bookings.Count();
-
-    Booking[] bookings = await _repository.GetBookingsByCustomerId(1);
-
-    Assert.AreEqual(bookingsCount, bookings.Length);
+    await _repository.GetBookingById(1);
   }
 
   [TestMethod]
   [ExpectedException(typeof(BookingNotFoundException))]
-  public async Task GetBookings_Failure_NoBookingsInDatabase()
-  {
-    await _repository.GetBookingsByCustomerId(1);
-  }
-
-  [TestMethod]
-  [ExpectedException(typeof(BookingNotFoundException))]
-  public async Task GetBookingsByCustomerId_Failure_CustomerNotFoundException_Wrong_CustomerId()
+  public async Task GetBookingById_Failure_BookingNotFoundException_Wrong_Id()
   {
     await _repository.CreateBooking(1, 0);
-    await _repository.CreateBooking(1, 1);
-    await _repository.CreateBooking(1, 2);
-    int bookingsCount = _context.Bookings.Count();
 
-    Booking[] bookings = await _repository.GetBookingsByCustomerId(2);
+    await _repository.GetBookingById(2);
   }
 }
 
