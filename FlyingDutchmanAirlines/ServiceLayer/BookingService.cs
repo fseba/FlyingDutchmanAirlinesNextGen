@@ -1,4 +1,6 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.Views;
@@ -20,7 +22,16 @@ public class BookingService
     _airportRepository = airportRepository;
   }
 
-  public async Task<(bool, Exception?)> CreateBooking(string customerName, int flightNumber)
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  public BookingService()
+  {
+    if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
+    {
+      throw new Exception("This constructor should only be used for testing");
+    }
+  }
+
+  public virtual async Task<(bool, Exception?)> CreateBooking(string customerName, int flightNumber)
   {
     if (string.IsNullOrWhiteSpace(customerName) || int.IsNegative(flightNumber))
     {
@@ -47,7 +58,7 @@ public class BookingService
     }
   }
 
-  public async Task<(bool, Exception?)> DeleteBooking(int bookingId)
+  public virtual async Task<(bool, Exception?)> DeleteBooking(int bookingId)
   {
     if (int.IsNegative(bookingId))
     {
@@ -66,7 +77,7 @@ public class BookingService
     }
   }
 
-  public async Task<BookingView> GetBookingById(int bookingId)
+  public virtual async Task<BookingView> GetBookingById(int bookingId)
   {
     if (int.IsNegative(bookingId))
     {
@@ -93,7 +104,7 @@ public class BookingService
     }
   }
 
-  public async IAsyncEnumerable<BookingView> GetBookingsByCustomerName(string customerName)
+  public virtual async IAsyncEnumerable<BookingView> GetBookingsByCustomerName(string customerName)
   {
     Customer customer;
 
