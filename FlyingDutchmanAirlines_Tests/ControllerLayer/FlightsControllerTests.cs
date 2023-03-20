@@ -1,11 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+
 using FlyingDutchmanAirlines.ControllerLayer;
 using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Views;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 
