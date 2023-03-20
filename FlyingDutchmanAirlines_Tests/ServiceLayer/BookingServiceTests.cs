@@ -7,6 +7,7 @@ using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Exceptions;
+using FlyingDutchmanAirlines.Views;
 
 namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
 
@@ -16,6 +17,7 @@ public class BookingServiceTests
   private Mock<BookingRepository> _mockBookingRepository = null!;
   private Mock<CustomerRepository> _mockCustomerRepository = null!;
   private Mock<FlightRepository> _mockFlightRepository = null!;
+  private Mock<AirportRepository> _mockAirportRepository = null!;
 
   [TestInitialize]
   public void TestInitialize()
@@ -23,6 +25,7 @@ public class BookingServiceTests
     _mockBookingRepository = new();
     _mockCustomerRepository = new();
     _mockFlightRepository = new();
+    _mockAirportRepository = new();
   }
 
 
@@ -40,7 +43,7 @@ public class BookingServiceTests
       .Setup(repository => repository.GetFlightByFlightNumber(0))
       .ReturnsAsync(new Flight());
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
     
     (bool result, Exception? exception) = await service.CreateBooking("Leo Tolstoy", 0);
 
@@ -54,7 +57,7 @@ public class BookingServiceTests
   [DataRow("Galileo", -1)]
   public async Task CreateBooking_Failure_InvalidInputArguments(string customerName, int flightNumber)
   {
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
     (bool result, Exception? exception) = await service.CreateBooking(customerName, flightNumber);
 
@@ -76,7 +79,7 @@ public class BookingServiceTests
       .Setup(repository => repository.GetFlightByFlightNumber(1))
       .ReturnsAsync(new Flight());
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
     (bool result, Exception? exception) = await service.CreateBooking("Galileo Galilei", 1);
 
@@ -95,7 +98,7 @@ public class BookingServiceTests
       .Setup(repository => repository.GetCustomerByName("Eise Eisingy"))
       .Returns(Task.FromResult(new Customer("Eise Eisingy") { CustomerId = 1 }));
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
     (bool result, Exception? exception) = await service.CreateBooking("Eise Eisingy", 2);
 
@@ -111,7 +114,7 @@ public class BookingServiceTests
       .Setup(repository => repository.GetFlightByFlightNumber(1))
       .Throws(new FlightNotFoundException());
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
     (bool result, Exception? exception) = await service.CreateBooking("Maurits Escher", 1);
 
     Assert.IsFalse(result);
@@ -135,7 +138,7 @@ public class BookingServiceTests
       .Setup(repository => repository.GetFlightByFlightNumber(0))
       .ReturnsAsync(new Flight());
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
     (bool result, Exception? exception) = await service.CreateBooking("Konrad Zuse", 0);
 
@@ -158,7 +161,7 @@ public class BookingServiceTests
       .Setup(repository => repository.GetCustomerByName("Bill Gates"))
       .ReturnsAsync(new Customer("Bill Gates"));
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
     (bool result, Exception? exception) = await service.CreateBooking("Bill Gates", 0);
 
@@ -174,7 +177,7 @@ public class BookingServiceTests
       .Setup(repository => repository.DeleteBooking(1))
       .Returns(Task.CompletedTask);
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
     (bool result, Exception? exception) = await service.DeleteBooking(1);
 
@@ -189,12 +192,69 @@ public class BookingServiceTests
       .Setup(repository => repository.DeleteBooking(1))
       .ThrowsAsync(new BookingNotFoundException());
 
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
     (bool result, Exception? exception) = await service.DeleteBooking(1);
 
     Assert.IsFalse(result);
     Assert.IsNotNull(exception);
     Assert.IsInstanceOfType(exception, typeof(BookingNotFoundException));
+  }
+
+  [TestMethod]
+  public async Task GetBookingById_Success()
+  {
+    _mockBookingRepository
+      .Setup(repository => repository.GetBookingById(1))
+      .ReturnsAsync(new Booking
+      {
+        BookingId = 1,
+        Customer = new Customer("Bob Bobson") { CustomerId = 1 },
+        CustomerId = 1,
+        FlightNumber = 148
+      });
+
+    await _mockBookingRepository.Object.CreateBooking(1, 148);
+
+    _mockFlightRepository
+      .Setup(repository => repository.GetFlightByFlightNumber(148))
+      .ReturnsAsync(new Flight
+      {
+        FlightNumber = 148,
+        Origin = 31,
+        Destination = 92
+      });
+
+    _mockAirportRepository
+      .Setup(repository => repository.GetAirportByID(31))
+      .ReturnsAsync(new Airport
+      {
+        AirportId = 31,
+        City = "Mexico City",
+        Iata = "MEX"
+      });
+
+    _mockAirportRepository
+      .Setup(repository => repository.GetAirportByID(92))
+      .ReturnsAsync(new Airport
+      {
+        AirportId = 92,
+        City = "Ulaanbaataar",
+        Iata = "UBN"
+      });
+
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
+
+    BookingView bookingView = await service.GetBookingById(1);
+
+    Assert.IsNotNull(bookingView);
+    Assert.AreEqual(bookingView.BookingId, 1);
+    Assert.AreEqual(bookingView.CustomerId, 1);
+    Assert.AreEqual(bookingView.CustomerName, "Bob Bobson");
+    Assert.AreEqual(bookingView.FlightView.FlightNumber, 148);
+    Assert.AreEqual(bookingView.FlightView.Origin.City, "Mexico City");
+    Assert.AreEqual(bookingView.FlightView.Origin.Code, "MEX");
+    Assert.AreEqual(bookingView.FlightView.Destination.City, "Ulaanbaataar");
+    Assert.AreEqual(bookingView.FlightView.Destination.Code, "UBN");
   }
 }
