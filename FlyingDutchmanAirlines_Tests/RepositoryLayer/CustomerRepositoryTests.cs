@@ -61,6 +61,8 @@ public class CustomerRepositoryTests
   [DataRow('%')]
   [DataRow('&')]
   [DataRow('*')]
+  [DataRow('/')]
+  [DataRow('=')]
   public async Task CreateCustomer_Failure_NameContainsInvalidCharacters(char invalidCharacter)
   {
     bool result = await _repository.CreateCustomer($"Donald Knuth{invalidCharacter}");
