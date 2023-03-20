@@ -48,12 +48,6 @@ public class CustomerRepository
 
     return true;
   }
-  
-  private static bool IsInvalidCustomerName(string name)
-  {
-    char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*' };
-    return string.IsNullOrWhiteSpace(name) || name.Any(c => forbiddenCharacters.Contains(c));
-  }
 
   public virtual async Task<Customer> GetCustomerByName(string name)
   {
@@ -62,8 +56,15 @@ public class CustomerRepository
       throw new CustomerNotFoundException();
     }
 
-    return await _context.Customers.FirstOrDefaultAsync(c => c.Name == name)
-      ?? throw new CustomerNotFoundException();
+    return await _context.Customers.Include("Bookings")
+                                   .FirstOrDefaultAsync(c => c.Name == name)
+           ?? throw new CustomerNotFoundException();
+  }
+
+  private static bool IsInvalidCustomerName(string name)
+  {
+    char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*', '/', '=' };
+    return string.IsNullOrWhiteSpace(name) || name.Any(c => forbiddenCharacters.Contains(c));
   }
 }
 
