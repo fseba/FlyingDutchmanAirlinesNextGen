@@ -63,31 +63,9 @@ public class BookingRepository
         throw new BookingNotFoundException();
       }
 
-      return await _context.Bookings.FindAsync(bookingId)
+      return await _context.Bookings.Include("Customer")
+                                    .FirstOrDefaultAsync(b => b.BookingId == bookingId)
           ?? throw new BookingNotFoundException();
-    }
-    catch (Exception)
-    {
-      throw;
-    }
-  }
-
-  public async Task<Booking[]> GetBookingsByCustomerId(int customerId)
-  {
-    try
-    {
-      if (!await _context.Bookings.AnyAsync())
-      {
-        Console.WriteLine("No bookings in database!");
-        throw new BookingNotFoundException();
-      }
-
-      Booking[] bookings = await _context.Bookings.Where(b => b.CustomerId == customerId)
-                                                  .ToArrayAsync();
-
-      return bookings.Length == 0
-        ? throw new BookingNotFoundException()
-        : bookings;
     }
     catch (Exception)
     {
