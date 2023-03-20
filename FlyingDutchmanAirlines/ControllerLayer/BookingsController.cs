@@ -10,11 +10,11 @@ namespace FlyingDutchmanAirlines.ControllerLayer;
 
 [Route("[controller]")]
 [Produces("application/json")]
-public class BookingController : ControllerBase
+public class BookingsController : ControllerBase
 {
   private BookingService _bookingService;
 
-  public BookingController(BookingService bookingService)
+  public BookingsController(BookingService bookingService)
   {
     _bookingService = bookingService;
   }
