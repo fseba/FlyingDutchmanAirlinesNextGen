@@ -34,7 +34,7 @@ public class BookingsController : ControllerBase
     (bool result, Exception? exception) = await _bookingService.CreateBooking(name, flightNumber);
 
     return (result && exception == null)
-      ? StatusCode((int)HttpStatusCode.Created)
+      ? StatusCode((int)HttpStatusCode.Created, $"Booking created - Flight {flightNumber} booked for {name}")
       : StatusCode((int)HttpStatusCode.InternalServerError, exception!.Message);
   }
 
