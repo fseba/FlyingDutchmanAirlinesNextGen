@@ -21,7 +21,7 @@ public class BookingData : IValidatableObject
 
   private string ValidateName(string name, string propertyName) =>  
     string.IsNullOrWhiteSpace(name)
-      ? throw new InvalidOperationException($"could not set {propertyName}")
+      ? throw new BadHttpRequestException($"could not set {propertyName} - no name provided")
       : name;
 
   public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
