@@ -4,37 +4,22 @@ namespace FlyingDutchmanAirlines.ControllerLayer.JsonData;
 
 public class BookingData : IValidatableObject
 {
-  private string _firstName = null!;
-  private string _lastName = null!;
-
-  public string? FirstName
-  {
-    get => _firstName;
-    set => _firstName = ValidateName(value!, nameof(FirstName));
-  }
-
-  public string? LastName
-  {
-    get => _lastName;
-    set => _lastName = ValidateName(value!, nameof(LastName));
-  }
-
-  private string ValidateName(string name, string propertyName) =>  
-    string.IsNullOrWhiteSpace(name)
-      ? throw new BadHttpRequestException($"could not set {propertyName} - no name provided")
-      : name;
+  public string? FirstName { get; set; }
+  public string? LastName { get; set; }
 
   public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
   {
     List<ValidationResult> results = new();
 
-    if (FirstName == null && LastName == null)
+
+    if (string.IsNullOrWhiteSpace(FirstName) && string.IsNullOrWhiteSpace(LastName))
     {
-      results.Add(new ValidationResult("All given data points are null"));
+      results.Add(new ValidationResult("Both given names are null or whitespace"));
     }
-    else if (FirstName == null || LastName == null)
+
+    else if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
     {
-      results.Add(new ValidationResult("One of the given data points is null"));
+      results.Add(new ValidationResult("One name is null or whitespace"));
     }
 
     return results;
