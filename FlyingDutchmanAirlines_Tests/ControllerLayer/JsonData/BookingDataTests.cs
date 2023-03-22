@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using FlyingDutchmanAirlines.ControllerLayer.JsonData;
 using Microsoft.AspNetCore.Http;
 
@@ -23,27 +24,37 @@ public class BookingDataTests
   [TestMethod]
   [DataRow("Mike", null)]
   [DataRow(null, "Morand")]
-  [ExpectedException(typeof(BadHttpRequestException))]
-  public void BookingData_InvalidData_NullPointers(string firstName, string lastName)
-  {
-    BookingData bookingData = new()
-    {
-      FirstName = firstName,
-      LastName = lastName
-    };
-  }
-
-  [TestMethod]
   [DataRow("Mike", "")]
   [DataRow("", "Morand")]
-  [ExpectedException(typeof(BadHttpRequestException))]
-  public void BookingData_InvalidData_EmptyString(string firstName, string lastName)
+  public void BookingData_SingleInvalidData(string firstName, string lastName)
   {
     BookingData bookingData = new()
     {
       FirstName = firstName,
       LastName = lastName
     };
+
+    var validationResults = bookingData.Validate(new ValidationContext(bookingData));
+
+    Assert.IsNotNull(validationResults);
+    Assert.AreEqual("One name is null or whitespace", validationResults.First().ErrorMessage);
+}
+
+  [TestMethod]
+  [DataRow("", "")]
+  [DataRow(null, null)]
+  public void BookingData_InvalidData_CompleteInvalidData(string firstName, string lastName)
+  {
+    BookingData bookingData = new()
+    {
+      FirstName = firstName,
+      LastName = lastName
+    };
+
+    var validationResults = bookingData.Validate(new ValidationContext(bookingData));
+
+    Assert.IsNotNull(validationResults);
+    Assert.AreEqual("Both given names are null or whitespace", validationResults.First().ErrorMessage);
   }
 }
 
