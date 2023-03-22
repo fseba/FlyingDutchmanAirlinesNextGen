@@ -55,22 +55,15 @@ public class BookingRepository
 
   public virtual async Task<Booking> GetBookingById(int bookingId)
   {
-    try
+    if (!await _context.Bookings.AnyAsync())
     {
-      if (!await _context.Bookings.AnyAsync())
-      {
-        Console.WriteLine("No bookings in database!");
-        throw new BookingNotFoundException();
-      }
+      Console.WriteLine("No bookings in database!");
+      throw new BookingNotFoundException();
+    }
 
-      return await _context.Bookings.Include("Customer")
-                                    .FirstOrDefaultAsync(b => b.BookingId == bookingId)
-          ?? throw new BookingNotFoundException();
-    }
-    catch (Exception)
-    {
-      throw;
-    }
+    return await _context.Bookings.Include("Customer")
+                                  .FirstOrDefaultAsync(b => b.BookingId == bookingId)
+        ?? throw new BookingNotFoundException();
   }
 
   public virtual async Task DeleteBooking(int bookingId)
@@ -82,17 +75,10 @@ public class BookingRepository
       throw new ArgumentException("Invalid argument provided");
     }
 
-    try
-    {
-      Booking booking = await GetBookingById(bookingId);
+    Booking booking = await GetBookingById(bookingId);
 
-      _context.Bookings.Remove(booking);
-      await _context.SaveChangesAsync();
-    }
-    catch (Exception)
-    {
-      throw;
-    }
+    _context.Bookings.Remove(booking);
+    await _context.SaveChangesAsync();
   }
 }
 
