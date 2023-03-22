@@ -46,14 +46,7 @@ public class FlightRepository
       throw new FlightNotFoundException();
     }
 
-    try
-    {
-      return await _context.Flights.ToArrayAsync();
-    }
-    catch (Exception)
-    {
-      throw;
-    }
+    return await _context.Flights.ToArrayAsync();
   }
 }
 
