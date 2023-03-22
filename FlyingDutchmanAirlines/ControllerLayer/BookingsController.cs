@@ -5,9 +5,11 @@ using FlyingDutchmanAirlines.ControllerLayer.JsonData;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.Views;
+using System;
 
 namespace FlyingDutchmanAirlines.ControllerLayer;
 
+[ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
 public class BookingsController : ControllerBase
@@ -44,11 +46,6 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<IActionResult> GetBookingsByCustomerName([FromBody] BookingData body)
   {
-    if (!ModelState.IsValid)
-    {
-      return StatusCode((int)HttpStatusCode.BadRequest, ModelState.Root.Errors.First().ErrorMessage);
-    }
-
     try
     {
       string customerName = $"{body.FirstName} {body.LastName}";
@@ -61,13 +58,40 @@ public class BookingsController : ControllerBase
 
       return StatusCode((int)HttpStatusCode.OK, bookings);
     }
-    catch (BookingNotFoundException)
+    catch (BookingNotFoundException ex)
     {
-      return StatusCode((int)HttpStatusCode.NotFound, "No bookings were found in the database");
+      return StatusCode((int)HttpStatusCode.NotFound, $"{ex.Message}");
     }
     catch (Exception)
     {
       return StatusCode((int)HttpStatusCode.BadRequest, "Bad request");
+    }
+  }
+
+  [HttpDelete("{bookingId}")]
+  [ProducesResponseType(StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+  public async Task<IActionResult> DeleteBooking(int bookingId)
+  {
+    try
+    {
+      await _bookingService.DeleteBooking(bookingId);
+
+      return StatusCode((int)HttpStatusCode.OK, "Booking successfully deleted");
+    }
+    catch (BookingNotFoundException)
+    {
+      return StatusCode((int)HttpStatusCode.NotFound, "No bookings were found in the database");
+    }
+    catch (ArgumentException)
+    {
+      return StatusCode((int)HttpStatusCode.BadRequest, "Bad Request");
+    }
+    catch (Exception ex)
+    {
+      return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
     }
   }
 }
