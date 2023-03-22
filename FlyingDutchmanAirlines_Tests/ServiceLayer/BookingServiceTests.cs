@@ -173,32 +173,26 @@ public class BookingServiceTests
   [TestMethod]
   public async Task DeleteBooking_Success()
   {
-    _mockBookingRepository
-      .Setup(repository => repository.DeleteBooking(1))
-      .Returns(Task.CompletedTask);
-
+    int bookingId = 1;
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
-    (bool result, Exception? exception) = await service.DeleteBooking(1);
+    await service.DeleteBooking(bookingId);
 
-    Assert.IsTrue(result);
-    Assert.IsNull(exception);
+    _mockBookingRepository.Verify(r => r.DeleteBooking(bookingId), Times.Once());
   }
 
   [TestMethod]
+  [ExpectedException(typeof(BookingNotFoundException))]
   public async Task DeleteBooking_Failure_BookingNotFoundException()
   {
+    int bookingId = 1;
     _mockBookingRepository
-      .Setup(repository => repository.DeleteBooking(1))
+      .Setup(repository => repository.DeleteBooking(bookingId))
       .ThrowsAsync(new BookingNotFoundException());
 
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
-    (bool result, Exception? exception) = await service.DeleteBooking(1);
-
-    Assert.IsFalse(result);
-    Assert.IsNotNull(exception);
-    Assert.IsInstanceOfType(exception, typeof(BookingNotFoundException));
+    await service.DeleteBooking(bookingId);
   }
 
   [TestMethod]
@@ -213,8 +207,6 @@ public class BookingServiceTests
         CustomerId = 1,
         FlightNumber = 148
       });
-
-    await _mockBookingRepository.Object.CreateBooking(1, 148);
 
     _mockFlightRepository
       .Setup(repository => repository.GetFlightByFlightNumber(148))

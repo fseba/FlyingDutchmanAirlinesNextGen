@@ -51,5 +51,23 @@ public class BookingsControllerTests
     Assert.AreEqual((int)HttpStatusCode.InternalServerError, response.StatusCode);
     Assert.AreEqual(new ArgumentException().Message, response.Value);
   }
+
+  [TestMethod]
+  public async Task DeleteBooking_Success()
+  {
+    Mock<BookingService> mockService = new();
+
+    mockService
+      .Setup(service => service.DeleteBooking(1))
+      .Returns(Task.CompletedTask);
+
+    BookingsController controller = new(mockService.Object);
+
+    ObjectResult? response = await controller.DeleteBooking(1) as ObjectResult;
+
+    Assert.IsNotNull(response);
+    Assert.AreEqual((int)HttpStatusCode.OK, response.StatusCode);
+    Assert.AreEqual("Booking successfully deleted", response.Value);
+  }
 }
 
