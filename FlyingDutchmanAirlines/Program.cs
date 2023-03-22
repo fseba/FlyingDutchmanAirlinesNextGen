@@ -34,7 +34,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(swagger =>
     {
       swagger.SwaggerEndpoint("/swagger/v1/swagger.json", "Flying Dutchman Airlines");
-      swagger.SupportedSubmitMethods(new[] { SubmitMethod.Get, SubmitMethod.Post });
     });
 }
 
