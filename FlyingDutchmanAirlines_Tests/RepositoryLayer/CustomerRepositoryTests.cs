@@ -82,7 +82,7 @@ public class CustomerRepositoryTests
   [TestMethod]
   public async Task GetCustomerByName_Success()
   {
-    Customer customer = await _repository.GetCustomerByName("Linus Torvalds");
+    Customer? customer = await _repository.GetCustomerByName("Linus Torvalds");
 
     Assert.IsNotNull(customer);
 
@@ -106,9 +106,11 @@ public class CustomerRepositoryTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(CustomerNotFoundException))]
+  //[ExpectedException(typeof(CustomerNotFoundException))]
   public async Task GetCustomerByName_Failure_UserNameNotFound()
   {
-    await _repository.GetCustomerByName("Bob Cat");
+    Customer? customer = await _repository.GetCustomerByName("Bob Cat");
+
+    Assert.IsNull(customer);
   }
 }

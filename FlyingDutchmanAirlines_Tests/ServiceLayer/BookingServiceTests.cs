@@ -33,11 +33,12 @@ public class BookingServiceTests
   public async Task CreateBooking_Success()
   {
     _mockBookingRepository
-      .Setup(repository => repository.CreateBooking(0, 0)).Returns(Task.CompletedTask);
+      .Setup(repository => repository.CreateBooking(0, 0))
+      .Returns(Task.CompletedTask);
 
     _mockCustomerRepository
       .Setup(repository => repository.GetCustomerByName("Leo Tolstoy"))
-      .Returns(Task.FromResult(new Customer("Leo Tolstoy")));
+      .ReturnsAsync(new Customer("Leo Tolstoy"));
 
     _mockFlightRepository
       .Setup(repository => repository.GetFlightByFlightNumber(0))
@@ -73,7 +74,7 @@ public class BookingServiceTests
     
     _mockCustomerRepository
       .Setup(repository => repository.GetCustomerByName("Galileo Galilei"))
-      .Returns(Task.FromResult(new Customer("Galileo Galilei") { CustomerId = 0 }));
+      .ReturnsAsync(new Customer("Galileo Galilei") { CustomerId = 0 });
 
     _mockFlightRepository
       .Setup(repository => repository.GetFlightByFlightNumber(1))
@@ -96,7 +97,7 @@ public class BookingServiceTests
 
     _mockCustomerRepository
       .Setup(repository => repository.GetCustomerByName("Eise Eisingy"))
-      .Returns(Task.FromResult(new Customer("Eise Eisingy") { CustomerId = 1 }));
+      .ReturnsAsync(new Customer("Eise Eisingy") { CustomerId = 1 });
 
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
@@ -131,7 +132,7 @@ public class BookingServiceTests
 
     _mockCustomerRepository
       .SetupSequence(repository => repository.GetCustomerByName("Konrad Zuse"))
-      .Throws(new CustomerNotFoundException())
+      .Returns(Task.FromResult<Customer?>(null))
       .ReturnsAsync(new Customer("Konrad Zuse"));
 
     _mockFlightRepository
