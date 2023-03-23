@@ -49,7 +49,7 @@ public class CustomerRepository
     return true;
   }
 
-  public virtual async Task<Customer> GetCustomerByName(string name)
+  public virtual async Task<Customer?> GetCustomerByName(string name)
   {
     if (IsInvalidCustomerName(name))
     {
@@ -57,8 +57,7 @@ public class CustomerRepository
     }
 
     return await _context.Customers.Include("Bookings")
-                                   .FirstOrDefaultAsync(c => c.Name == name)
-           ?? throw new CustomerNotFoundException();
+                                   .FirstOrDefaultAsync(c => c.Name == name);
   }
 
   private static bool IsInvalidCustomerName(string name)
