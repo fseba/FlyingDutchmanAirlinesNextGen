@@ -45,11 +45,11 @@ public class BookingService
         return (false, new CouldNotAddBookingToDatabaseException());
       }
 
-      Customer customer =
-        await GetCustomerFromDatabase(customerName)
-        ?? await AddCustomerToDatabase(customerName);
+      Customer? customer = await _customerRepository.GetCustomerByName(customerName)
+                        ?? await AddCustomerToDatabase(customerName);
 
-      await _bookingRepository.CreateBooking(customer.CustomerId, flightNumber);
+      await _bookingRepository.CreateBooking(customer!.CustomerId, flightNumber);
+
       return (true, null);
     }
     catch (Exception ex)
@@ -92,8 +92,13 @@ public class BookingService
   {
     Customer customer;
 
-    customer = await GetCustomerFromDatabase(customerName) ?? throw new BookingNotFoundException($"Customer {customerName} not found");
-    if (!customer.Bookings.Any()) throw new BookingNotFoundException($"No bookings for {customerName} in database");
+    customer = await _customerRepository.GetCustomerByName(customerName)
+               ?? throw new BookingNotFoundException($"Customer {customerName} not found");
+
+    if (!customer.Bookings.Any())
+    {
+      throw new BookingNotFoundException($"No bookings for {customerName} in database");
+    }
 
     foreach (Booking booking in customer.Bookings)
     {
@@ -113,23 +118,7 @@ public class BookingService
     }
   }
 
-  private async Task<Customer?> GetCustomerFromDatabase(string name)
-  {
-    try
-    {
-      return await _customerRepository.GetCustomerByName(name);
-    }
-    catch (CustomerNotFoundException)
-    {
-      return null;
-    }
-    catch (Exception)
-    {
-      throw;
-    }
-  }
-
-  private async Task<Customer> AddCustomerToDatabase(string name)
+  private async Task<Customer?> AddCustomerToDatabase(string name)
   {
     await _customerRepository.CreateCustomer(name);
     return await _customerRepository.GetCustomerByName(name);
