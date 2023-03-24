@@ -53,17 +53,16 @@ public class BookingRepository
     }
   }
 
-  public virtual async Task<Booking> GetBookingById(int bookingId)
+  public virtual async Task<Booking?> GetBookingById(int bookingId)
   {
     if (!await _context.Bookings.AnyAsync())
     {
       Console.WriteLine("No bookings in database!");
-      throw new BookingNotFoundException();
+      return null;
     }
 
     return await _context.Bookings.Include("Customer")
-                                  .FirstOrDefaultAsync(b => b.BookingId == bookingId)
-        ?? throw new BookingNotFoundException();//lieber null zurück geben
+                                  .FirstOrDefaultAsync(b => b.BookingId == bookingId);
   }
 
   public virtual async Task DeleteBooking(int bookingId)
