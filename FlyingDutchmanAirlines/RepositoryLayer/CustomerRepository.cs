@@ -35,7 +35,7 @@ public class CustomerRepository
 
     try
     {
-      Customer newCustomer = new(name);
+      var newCustomer = new Customer(name);
 
       _context.Customers.Add(newCustomer);
       await _context.SaveChangesAsync();

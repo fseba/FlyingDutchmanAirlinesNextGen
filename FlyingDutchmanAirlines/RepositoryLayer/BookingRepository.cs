@@ -35,7 +35,7 @@ public class BookingRepository
       throw new ArgumentException("Invalid arguments provided");
     }
 
-    Booking newBooking = new() 
+    var newBooking = new Booking() 
     {
       CustomerId = customerId,
       FlightNumber = flightNumber
@@ -63,7 +63,7 @@ public class BookingRepository
 
     return await _context.Bookings.Include("Customer")
                                   .FirstOrDefaultAsync(b => b.BookingId == bookingId)
-        ?? throw new BookingNotFoundException();
+        ?? throw new BookingNotFoundException();//lieber null zurück geben
   }
 
   public virtual async Task DeleteBooking(int bookingId)
@@ -75,7 +75,7 @@ public class BookingRepository
       throw new ArgumentException("Invalid argument provided");
     }
 
-    Booking booking = await GetBookingById(bookingId);
+    var booking = await GetBookingById(bookingId);
 
     _context.Bookings.Remove(booking);
     await _context.SaveChangesAsync();

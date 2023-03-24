@@ -45,8 +45,8 @@ public class BookingService
         return (false, new CouldNotAddBookingToDatabaseException());
       }
 
-      Customer? customer = await _customerRepository.GetCustomerByName(customerName)
-                        ?? await AddCustomerToDatabase(customerName);
+      var customer = await _customerRepository.GetCustomerByName(customerName)
+          ?? await AddCustomerToDatabase(customerName);
 
       await _bookingRepository.CreateBooking(customer!.CustomerId, flightNumber);
 
@@ -75,25 +75,23 @@ public class BookingService
       throw new ArgumentException("Invalid booking id - Is negative");
     }
 
-    Booking booking = await _bookingRepository.GetBookingById(bookingId);
+    var booking = await _bookingRepository.GetBookingById(bookingId);
 
-    Flight flight = await _flightRepository.GetFlightByFlightNumber(booking.FlightNumber);
-    Airport originAirport = await _airportRepository.GetAirportByID(flight.Origin);
-    Airport destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+    var flight = await _flightRepository.GetFlightByFlightNumber(booking.FlightNumber);
+    var originAirport = await _airportRepository.GetAirportByID(flight.Origin);
+    var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
 
     FlightView flightView = new(flight.FlightNumber,
-                                (originAirport.City, originAirport.Iata),
-                                (destinationAirport.City, destinationAirport.Iata));
+                               (originAirport.City, originAirport.Iata),
+                               (destinationAirport.City, destinationAirport.Iata));
 
     return new BookingView(bookingId, booking.Customer!.CustomerId, booking.Customer.Name, flightView);
   }
 
   public virtual async IAsyncEnumerable<BookingView> GetBookingsByCustomerName(string customerName)
   {
-    Customer customer;
-
-    customer = await _customerRepository.GetCustomerByName(customerName)
-               ?? throw new BookingNotFoundException($"Customer {customerName} not found");
+    var customer = await _customerRepository.GetCustomerByName(customerName)
+        ?? throw new BookingNotFoundException($"Customer {customerName} not found");
 
     if (!customer.Bookings.Any())
     {

@@ -27,12 +27,7 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> CreateBooking([FromBody] BookingData body, int flightNumber)
   {
-    if (!ModelState.IsValid)
-    {
-      return StatusCode((int)HttpStatusCode.BadRequest, ModelState.Root.Errors.First().ErrorMessage);
-    }
-
-    string name = $"{body.FirstName} {body.LastName}";
+    var name = $"{body.FirstName} {body.LastName}";
     (bool result, Exception? exception) = await _bookingService.CreateBooking(name, flightNumber);
 
     return (result && exception == null)
@@ -48,9 +43,9 @@ public class BookingsController : ControllerBase
   {
     try
     {
-      string customerName = $"{body.FirstName} {body.LastName}";
+      var customerName = $"{body.FirstName} {body.LastName}";
 
-      Queue<BookingView> bookings = new();
+      var bookings = new Queue<BookingView>();
       await foreach (BookingView booking in _bookingService.GetBookingsByCustomerName(customerName))
       {
         bookings.Enqueue(booking);

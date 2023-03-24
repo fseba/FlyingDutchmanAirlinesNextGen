@@ -61,9 +61,9 @@ public class FlightService
   {
     try
     {
-      Flight flight = await _flightRepository.GetFlightByFlightNumber(flightNumber);
-      Airport originAirport = await _airportRepository.GetAirportByID(flight.Origin);
-      Airport destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+      var flight = await _flightRepository.GetFlightByFlightNumber(flightNumber);
+      var originAirport = await _airportRepository.GetAirportByID(flight.Origin);
+      var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
 
       return new FlightView
         (flight.FlightNumber,

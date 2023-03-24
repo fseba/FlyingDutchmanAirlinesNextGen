@@ -26,7 +26,7 @@ public class FlightsController : ControllerBase
   {
     try
     {
-      Queue<FlightView> flights = new();
+      var flights = new Queue<FlightView>();
       await foreach (FlightView flight in _service.GetFlights())
       {
         flights.Enqueue(flight);
@@ -57,7 +57,7 @@ public class FlightsController : ControllerBase
         throw new Exception();
       }
 
-      FlightView flight = await _service.GetFlightByFlightNumber(flightNumber);
+      var flight = await _service.GetFlightByFlightNumber(flightNumber);
       return StatusCode((int)HttpStatusCode.OK, flight);
     }
     catch (FlightNotFoundException)
