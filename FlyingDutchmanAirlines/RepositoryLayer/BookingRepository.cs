@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.Exceptions;
+
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
@@ -26,11 +26,11 @@ public class BookingRepository
     }
   }
 
-  public virtual async Task CreateBooking(int customerId, int flightNumber)
+  public virtual async Task<bool> CreateBooking(int customerId, int flightNumber)
   {
     if (int.IsNegative(customerId) || int.IsNegative(flightNumber))
     {
-      Console.WriteLine($"Argument Exception in CreatingBooking! " +
+      Console.WriteLine($"Argument Exception in CreateBooking! " +
         $"Customer ID = {customerId}, flightNumber = {flightNumber}");
       throw new ArgumentException("Invalid arguments provided");
     }
@@ -45,11 +45,12 @@ public class BookingRepository
     {
       _context.Bookings.Add(newBooking);
       await _context.SaveChangesAsync();
+      return true;
     }
     catch (Exception ex)
     {
       Console.WriteLine($"Exception during database query: {ex.Message}");
-      throw new CouldNotAddBookingToDatabaseException($"Exception during database query: {ex.Message}", ex.InnerException!);
+      return false;
     }
   }
 
