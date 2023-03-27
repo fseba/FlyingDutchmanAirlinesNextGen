@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.InMemory;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.Exceptions;
 using System.Diagnostics.CodeAnalysis;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;

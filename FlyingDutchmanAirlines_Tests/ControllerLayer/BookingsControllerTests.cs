@@ -19,7 +19,7 @@ public class BookingsControllerTests
 
     mockService
       .Setup(service => service.CreateBooking("Bob Bobson", 1))
-      .ReturnsAsync((true, null));
+      .ReturnsAsync(true);
 
     BookingsController controller = new(mockService.Object);
 
@@ -39,7 +39,7 @@ public class BookingsControllerTests
 
     mockService
       .Setup(service => service.CreateBooking("Bob Bobson", 1))
-      .ReturnsAsync((false, new ArgumentException()));
+      .ReturnsAsync(false);
 
     BookingsController controller = new(mockService.Object);
 
@@ -49,7 +49,7 @@ public class BookingsControllerTests
 
     Assert.IsNotNull(response);
     Assert.AreEqual((int)HttpStatusCode.InternalServerError, response.StatusCode);
-    Assert.AreEqual(new ArgumentException().Message, response.Value);
+    Assert.AreEqual("The booking creation process encountered an error and was unable to complete", response.Value);
   }
 
   [TestMethod]

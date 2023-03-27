@@ -1,7 +1,6 @@
 ﻿using System;
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines_Tests.Stubs;
 using Microsoft.EntityFrameworkCore;
@@ -48,10 +47,11 @@ public class BookingRepositoryTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(CouldNotAddBookingToDatabaseException))]
   public async Task CreateBooking_Failure_DatabaseError()
   {
-    await _repository.CreateBooking(0, 1);
+    bool result = await _repository.CreateBooking(0, 1);
+
+    Assert.IsFalse(result);
   }
 
   [TestMethod]

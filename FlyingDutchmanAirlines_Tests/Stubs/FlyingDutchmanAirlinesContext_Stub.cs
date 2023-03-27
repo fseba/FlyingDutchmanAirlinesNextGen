@@ -28,7 +28,7 @@ public class FlyingDutchmanAirlinesContext_Stub : FlyingDutchmanAirlinesContext
 
     if (bookings.Any(b => b.CustomerId != 1))
     {
-      throw new Exception("Database error!");
+      throw new DbUpdateException("Database error!");
     }
 
     return await base.SaveChangesAsync(cancellationToken);
