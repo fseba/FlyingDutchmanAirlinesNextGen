@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.Views;
 
@@ -31,31 +30,22 @@ public class BookingService
     }
   }
 
-  public virtual async Task<(bool, Exception?)> CreateBooking(string customerName, int flightNumber)
+  public virtual async Task<bool> CreateBooking(string customerName, int flightNumber)
   {
     if (string.IsNullOrWhiteSpace(customerName) || int.IsNegative(flightNumber))
     {
-      return (false, new ArgumentException("Invalid flight number or empty username provided"));
+      throw new ArgumentException("Invalid flight number or empty username provided");
     }
 
-    try
+    if (!await FlightExistsInDatabase(flightNumber))
     {
-      if (!await FlightExistsInDatabase(flightNumber))
-      {
-        return (false, new CouldNotAddBookingToDatabaseException());
-      }
-
-      var customer = await _customerRepository.GetCustomerByName(customerName)
-          ?? await AddCustomerToDatabase(customerName);
-
-      await _bookingRepository.CreateBooking(customer!.CustomerId, flightNumber);
-
-      return (true, null);
+      return false;
     }
-    catch (Exception ex)
-    {
-      return (false, ex);
-    }
+
+    var customer = await _customerRepository.GetCustomerByName(customerName)
+        ?? await AddCustomerToDatabase(customerName);
+
+    return await _bookingRepository.CreateBooking(customer!.CustomerId, flightNumber);
   }
 
   public virtual async Task<Booking?> DeleteBooking(int bookingId)
