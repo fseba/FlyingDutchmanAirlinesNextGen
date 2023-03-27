@@ -37,48 +37,68 @@ public class BookingsController : ControllerBase
 
   [HttpPost]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingView))]
-  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetBookingsByCustomerName([FromBody] BookingData body)
   {
     try
     {
       var customerName = $"{body.FirstName} {body.LastName}";
 
-      var bookings = new Queue<BookingView>();
-      await foreach (BookingView booking in _bookingService.GetBookingsByCustomerName(customerName))
+      var bookings = new Queue<BookingView?>();
+      await foreach (BookingView? booking in _bookingService.GetBookingsByCustomerName(customerName))
       {
         bookings.Enqueue(booking);
       }
 
-      return StatusCode((int)HttpStatusCode.OK, bookings);
+      return bookings.Count != 0
+        ? StatusCode((int)HttpStatusCode.OK, bookings)
+        : StatusCode((int)HttpStatusCode.NoContent);
     }
-    catch (BookingNotFoundException ex)
+    catch (Exception ex)
     {
-      return StatusCode((int)HttpStatusCode.NotFound, $"{ex.Message}");
+      return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
     }
-    catch (Exception)
+  }
+
+  [HttpGet("{bookingId:int}")]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingView))]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  public async Task<IActionResult> GetBookingById(int bookingId)
+  {
+    try
     {
-      return StatusCode((int)HttpStatusCode.BadRequest, "Bad request");
+      if (!ModelState.IsValid || int.IsNegative(bookingId))
+      {
+        return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative booking number");
+      }
+
+      var booking = await _bookingService.GetBookingById(bookingId);
+
+      return StatusCode((int)HttpStatusCode.OK, booking);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
     }
   }
 
   [HttpDelete("{bookingId}")]
   [ProducesResponseType(StatusCodes.Status200OK)]
-  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> DeleteBooking(int bookingId)
   {
     try
     {
-      await _bookingService.DeleteBooking(bookingId);
+      var deletedBooking = await _bookingService.DeleteBooking(bookingId);
 
-      return StatusCode((int)HttpStatusCode.OK, "Booking successfully deleted");
-    }
-    catch (BookingNotFoundException)
-    {
-      return StatusCode((int)HttpStatusCode.NotFound, "No bookings were found in the database");
+      return deletedBooking is not null
+        ? StatusCode((int)HttpStatusCode.OK, $"Booking {deletedBooking.BookingId} for {deletedBooking.Customer!.Name} successfully deleted")
+        : StatusCode((int)HttpStatusCode.NoContent);
     }
     catch (ArgumentException)
     {
