@@ -38,8 +38,8 @@ public class FlightService
 
 
       yield return new FlightView(flight.FlightNumber,
-                                 (originAirport!.City, originAirport.Iata),
-                                 (destinationAirport!.City, destinationAirport.Iata));
+                                 (originAirport.City, originAirport.Iata),
+                                 (destinationAirport.City, destinationAirport.Iata));
     }
   }
 
@@ -56,8 +56,8 @@ public class FlightService
     var destinationAirport = await GetAirportOrDefault(flight.Destination);
 
     return new FlightView(flight.FlightNumber,
-                         (originAirport!.City, originAirport.Iata),
-                         (destinationAirport!.City, destinationAirport.Iata));
+                         (originAirport.City, originAirport.Iata),
+                         (destinationAirport.City, destinationAirport.Iata));
   }
 
   private async Task<Airport> GetAirportOrDefault(int airportNumber)
