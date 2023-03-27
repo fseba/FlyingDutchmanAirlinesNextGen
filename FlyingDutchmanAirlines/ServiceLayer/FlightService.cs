@@ -30,54 +30,35 @@ public class FlightService
 
   public virtual async IAsyncEnumerable<FlightView> GetFlights()
   {
-    Flight[] flights = await _flightRepository.GetFlights();
+    IEnumerable<Flight> flights = await _flightRepository.GetFlights();
 
     foreach (Flight flight in flights)
     {
-      Airport originAirport;
-      Airport destinationAirport;
+      var originAirport = await _airportRepository.GetAirportByID(flight.Origin) ?? new Airport();
+      var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination) ?? new Airport();
 
-      try
-      {
-        originAirport = await _airportRepository.GetAirportByID(flight.Origin);
-        destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
-      }
-      catch (FlightNotFoundException)
-      {
-        throw;
-      }
-      catch (Exception ex)
-      {
-        throw new ArgumentException($"{ex.Message}", ex.InnerException);
-      }
 
       yield return new FlightView(flight.FlightNumber,
-                                 (originAirport.City, originAirport.Iata),
-                                 (destinationAirport.City, destinationAirport.Iata));
+                                 (originAirport!.City, originAirport.Iata),
+                                 (destinationAirport!.City, destinationAirport.Iata));
     }
   }
 
-  public virtual async Task<FlightView> GetFlightByFlightNumber(int flightNumber)
+  public virtual async Task<FlightView?> GetFlightByFlightNumber(int flightNumber)
   {
-    try
-    {
-      var flight = await _flightRepository.GetFlightByFlightNumber(flightNumber);
-      var originAirport = await _airportRepository.GetAirportByID(flight.Origin);
-      var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+    var flight = await _flightRepository.GetFlightByFlightNumber(flightNumber);
 
-      return new FlightView
-        (flight.FlightNumber,
-        (originAirport.City, originAirport.Iata),
-        (destinationAirport.City, destinationAirport.Iata));
-    }
-    catch (FlightNotFoundException)
+    if (flight is null)
     {
-      throw;
+      return null;
     }
-    catch (Exception ex)
-    {
-      throw new ArgumentException($"{ex.Message}", ex.InnerException);
-    }
+
+    var originAirport = await _airportRepository.GetAirportByID(flight.Origin);
+    var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+
+    return new FlightView(flight.FlightNumber,
+                         (originAirport!.City, originAirport.Iata),
+                         (destinationAirport!.City, destinationAirport.Iata));
   }
 }
 
