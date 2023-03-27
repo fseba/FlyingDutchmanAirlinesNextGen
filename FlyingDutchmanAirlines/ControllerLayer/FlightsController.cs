@@ -7,6 +7,7 @@ using FlyingDutchmanAirlines.Exceptions;
 
 namespace FlyingDutchmanAirlines.ControllerLayer;
 
+[ApiController]
 [Route("[controller]")]
 [Produces("application/json")]
 public class FlightsController : ControllerBase
@@ -20,7 +21,7 @@ public class FlightsController : ControllerBase
 
   [HttpGet]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Queue<FlightView>))]
-  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetFlights()
   {
@@ -32,41 +33,39 @@ public class FlightsController : ControllerBase
         flights.Enqueue(flight);
       }
 
-      return StatusCode((int)HttpStatusCode.OK, flights);
+      return flights.Count != 0
+        ? StatusCode((int)HttpStatusCode.OK, flights)
+        : StatusCode((int)HttpStatusCode.NoContent);
     }
-    catch (FlightNotFoundException)
+    catch (Exception ex)
     {
-      return StatusCode((int)HttpStatusCode.NotFound, "No flights were found in the database");
-    }
-    catch (Exception)
-    {
-      return StatusCode((int)HttpStatusCode.InternalServerError, "An error occurred");
+      return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
     }
   }
 
   [HttpGet("{flightNumber}")]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FlightView))]
-  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetFlightByFlightNumber(int flightNumber)
   {
+    if (int.IsNegative(flightNumber))
+    {
+      return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative flight number");
+    }
+
     try
     {
-      if (!ModelState.IsValid || int.IsNegative(flightNumber))
-      {
-        throw new Exception();
-      }
-
       var flight = await _service.GetFlightByFlightNumber(flightNumber);
-      return StatusCode((int)HttpStatusCode.OK, flight);
+
+      return flight is not null
+        ? StatusCode((int)HttpStatusCode.OK, flight)
+        : StatusCode((int)HttpStatusCode.NoContent);
     }
-    catch (FlightNotFoundException)
+    catch (Exception ex)
     {
-      return StatusCode((int)HttpStatusCode.NotFound, "The flight was not found in the database");
-    }
-    catch (Exception)
-    {
-      return StatusCode((int)HttpStatusCode.BadRequest, "Bad request");
+      return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
     }
   }
 }
