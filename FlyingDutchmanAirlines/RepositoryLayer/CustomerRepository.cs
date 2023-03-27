@@ -22,7 +22,7 @@ public class CustomerRepository
   {
     if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
     {
-      throw new Exception("This constructor should only be used for testing");
+      throw new InvalidOperationException("This constructor should only be used for testing");
     }
   }
 
@@ -53,7 +53,7 @@ public class CustomerRepository
   {
     if (IsInvalidCustomerName(name))
     {
-      throw new CustomerNotFoundException();
+      return null;
     }
 
     return await _context.Customers.Include("Bookings")

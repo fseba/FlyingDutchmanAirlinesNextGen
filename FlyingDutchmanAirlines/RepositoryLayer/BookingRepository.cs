@@ -22,7 +22,7 @@ public class BookingRepository
   {
     if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
     {
-      throw new Exception("This constructor should only be used for testing");
+      throw new InvalidOperationException("This constructor should only be used for testing");
     }
   }
 
@@ -65,7 +65,7 @@ public class BookingRepository
                                   .FirstOrDefaultAsync(b => b.BookingId == bookingId);
   }
 
-  public virtual async Task DeleteBooking(int bookingId)
+  public virtual async Task<Booking?> DeleteBooking(int bookingId)
   {
     if (int.IsNegative(bookingId))
     {
@@ -76,8 +76,15 @@ public class BookingRepository
 
     var booking = await GetBookingById(bookingId);
 
-    _context.Bookings.Remove(booking);
+    if (booking is null)
+    {
+      return null; 
+    }
+
+    var deletedBooking = _context.Bookings.Remove(booking).Entity;
     await _context.SaveChangesAsync();
+
+    return deletedBooking;
   }
 }
 

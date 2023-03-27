@@ -22,20 +22,19 @@ public class AirportRepository
   {
     if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
     {
-      throw new Exception("This constructor should only be used for testing");
+      throw new InvalidOperationException("This constructor should only be used for testing");
     }
   }
 
-  public virtual async Task<Airport> GetAirportByID(int airportID)
+  public virtual async Task<Airport?> GetAirportById(int airportId)
   {
-    if (int.IsNegative(airportID))
+    if (int.IsNegative(airportId))
     {
-      Console.WriteLine($"Argument Exception in GetAirpotByID! Airport ID = {airportID}");
-      throw new ArgumentException("Invalid argument provided");
+      Console.WriteLine($"Negativ Id in GetAirpotByID! Airport ID = {airportId}");
+      throw new ArgumentException("Invalid AirportId - Negative id");
     }
 
-    return await _context.Airports.FirstOrDefaultAsync(a => a.AirportId == airportID)
-      ?? throw new AirportNotFoundException();
+    return await _context.Airports.FirstOrDefaultAsync(a => a.AirportId == airportId);
   }
 }
 

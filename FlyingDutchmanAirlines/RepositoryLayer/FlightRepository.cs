@@ -22,20 +22,19 @@ public class FlightRepository
   {
     if (Assembly.GetExecutingAssembly().FullName == Assembly.GetCallingAssembly().FullName)
     {
-      throw new Exception("This constructor should only be used for testing");
+      throw new InvalidOperationException("This constructor should only be used for testing");
     }
   }
 
-  public virtual async Task<Flight> GetFlightByFlightNumber(int flightNumber)
+  public virtual async Task<Flight?> GetFlightByFlightNumber(int flightNumber)
   {
     if (int.IsNegative(flightNumber))
     {
       Console.WriteLine($"Could not find flight in GetFlightByFlightNumber! flightNumber = {flightNumber}");
-      throw new FlightNotFoundException();
+      throw new ArgumentException("Invalid flight number - Negative number");
     }
 
-    return await _context.Flights.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber)
-      ?? throw new FlightNotFoundException();
+    return await _context.Flights.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber);
   }
 
   public virtual async Task<Flight[]> GetFlights()
@@ -43,7 +42,7 @@ public class FlightRepository
     if (!_context.Flights.Any())
     {
       Console.WriteLine("No flights in database!");
-      throw new FlightNotFoundException();
+      return Array.Empty<Flight>();
     }
 
     return await _context.Flights.ToArrayAsync();
