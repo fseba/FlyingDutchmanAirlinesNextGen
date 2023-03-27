@@ -47,8 +47,8 @@ public class FlightRepositoryTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(FlightNotFoundException))]
-  public async Task GetFlightByFlightnumber_Failure_InvalidFlightnumber()
+  [ExpectedException(typeof(ArgumentException))]
+  public async Task GetFlightByFlightnumber_Failure_InvalidFlightnumber_ArgumentException()
   {
     await _repository.GetFlightByFlightNumber(-1);
   }
@@ -56,10 +56,10 @@ public class FlightRepositoryTests
   [TestMethod]
   public async Task GetFlightByFlightnumber_Success()
   {
-    Flight flight = await _repository.GetFlightByFlightNumber(1);
+    var flight = await _repository.GetFlightByFlightNumber(1);
     Assert.IsNotNull(flight);
 
-    Flight dbFlight = _context.Flights.First(f => f.FlightNumber == 1);
+    var dbFlight = _context.Flights.First(f => f.FlightNumber == 1);
     Assert.IsNotNull(dbFlight);
 
     Assert.AreEqual(dbFlight.FlightNumber, flight.FlightNumber);
@@ -68,10 +68,11 @@ public class FlightRepositoryTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(FlightNotFoundException))]
-  public async Task GetFlightByFlightNumber_Failure_DatabaseException()
+  public async Task GetFlightByFlightNumber_Failure_UnknownId_Returns_Null()
   {
-    await _repository.GetFlightByFlightNumber(2);
+    var flight = await _repository.GetFlightByFlightNumber(2);
+
+    Assert.IsNull(flight);
   }
 
   [TestMethod]
@@ -80,7 +81,7 @@ public class FlightRepositoryTests
     Flight[] flights = await _repository.GetFlights();
     Assert.IsNotNull(flights);
 
-    Flight dbFlight = _context.Flights.First(f => f.FlightNumber == 1);
+    var dbFlight = _context.Flights.First(f => f.FlightNumber == 1);
     Assert.IsNotNull(dbFlight);
 
     Assert.AreEqual(dbFlight.FlightNumber, flights.First().FlightNumber);
@@ -89,7 +90,6 @@ public class FlightRepositoryTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(FlightNotFoundException))]
   public async Task GetFlights_Failure_NoFlightsInDatabase()
   {
     DbContextOptions<FlyingDutchmanAirlinesContext> dbContextOptions =
@@ -101,6 +101,8 @@ public class FlightRepositoryTests
     Assert.IsNotNull(repository);
 
     Flight[] flights = await repository.GetFlights();
+
+    Assert.AreEqual(0, flights.Length);
   }
 }
 

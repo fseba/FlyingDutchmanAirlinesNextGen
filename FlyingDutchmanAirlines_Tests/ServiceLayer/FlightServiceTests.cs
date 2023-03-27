@@ -73,35 +73,22 @@ public class FlightServiceTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(FlightNotFoundException))]
-  public async Task GetFlights_Failure_RepositoryException()
+  public async Task GetFlights_Failure_Empty_Result()
   {
-    _mockAirportRepository
-      .Setup(repository => repository.GetAirportByID(31))
-      .ThrowsAsync(new FlightNotFoundException());
+    _mockFlightRepository
+      .Setup(repository => repository.GetFlights())
+      .ReturnsAsync(Array.Empty<Flight>());
 
     FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
 
-    await foreach (FlightView _ in service.GetFlights())
+    List<FlightView> flightViews = new();
+    
+    await foreach (FlightView flightView in service.GetFlights())
     {
-      ;
+      flightViews.Add(flightView);
     }
-  }
 
-  [TestMethod]
-  [ExpectedException(typeof(ArgumentException))]
-  public async Task GetFlights_Failure_ArugmentException()
-  { 
-    _mockAirportRepository
-      .Setup(repository => repository.GetAirportByID(31))
-      .ThrowsAsync(new NullReferenceException());
-
-    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
-
-    await foreach (FlightView _ in service.GetFlights())
-    {
-      ;
-    }
+    Assert.AreEqual(0, flightViews.Count);
   }
 
   [TestMethod]
@@ -109,7 +96,7 @@ public class FlightServiceTests
   {
     FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
 
-    FlightView flightView = await service.GetFlightByFlightNumber(148);
+    var flightView = await service.GetFlightByFlightNumber(148);
 
     Assert.IsNotNull(flightView);
     Assert.AreEqual(flightView.FlightNumber, 148);
@@ -120,25 +107,12 @@ public class FlightServiceTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(FlightNotFoundException))]
-  public async Task GetFlightByNumber_Failure_RepositoryException_FlightNotFoundException()
-  {
-    _mockFlightRepository
-      .Setup(repository => repository.GetFlightByFlightNumber(-1))
-      .ThrowsAsync(new FlightNotFoundException());
-
-    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
-
-    await service.GetFlightByFlightNumber(-1);
-  }
-
-  [TestMethod]
   [ExpectedException(typeof(ArgumentException))]
-  public async Task GetFlightByNumber_Failure_RepositoryException_Exception()
+  public async Task GetFlightByNumber_Failure_RepositoryException_ArgumentException()
   {
     _mockFlightRepository
       .Setup(repository => repository.GetFlightByFlightNumber(-1))
-      .ThrowsAsync(new OverflowException());
+      .ThrowsAsync(new ArgumentException());
 
     FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
 

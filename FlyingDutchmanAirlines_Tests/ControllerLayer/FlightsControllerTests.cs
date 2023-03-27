@@ -13,7 +13,7 @@ namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 public class FlightsControllerTests
 {
   [TestMethod]
-  public async Task GetFlights_Success()
+  public async Task GetFlights_Success_200()
   {
     Mock<FlightService> mockService = new();
 
@@ -51,21 +51,22 @@ public class FlightsControllerTests
   }
 
   [TestMethod]
-  public async Task GetFlight_Failure_FlightNotFoundException_404()
+  public async Task GetFlight_Failure_Empty_Result_204()
   {
     Mock<FlightService> mockService = new();
 
+    var emptyFlightViews = Enumerable.Empty<FlightView>();
+
     mockService
       .Setup(s => s.GetFlights())
-      .Throws(new FlightNotFoundException());
+      .Returns(FlightViewAsyncGenerator(emptyFlightViews));
 
     FlightsController controller = new(mockService.Object);
 
-    ObjectResult? response = await controller.GetFlights() as ObjectResult;
+    StatusCodeResult? response = await controller.GetFlights() as StatusCodeResult;
 
     Assert.IsNotNull(response);
-    Assert.AreEqual((int)HttpStatusCode.NotFound, response.StatusCode);
-    Assert.AreEqual("No flights were found in the database", response.Value);
+    Assert.AreEqual((int)HttpStatusCode.NoContent, response.StatusCode);
   }
 
   [TestMethod]
@@ -83,11 +84,10 @@ public class FlightsControllerTests
 
     Assert.IsNotNull(response);
     Assert.AreEqual((int)HttpStatusCode.InternalServerError, response.StatusCode);
-    Assert.AreEqual("An error occurred", response.Value);
   }
 
   [TestMethod]
-  public async Task GetFlightByFlightNumber_Success()
+  public async Task GetFlightByFlightNumber_Success_200()
   {
     Mock<FlightService> mockService = new();
 
@@ -110,41 +110,34 @@ public class FlightsControllerTests
   }
 
   [TestMethod]
-  public async Task GetFlightByFlightNumber_Failure_FlightNotFoundException_404()
+  public async Task GetFlightByFlightNumber_Failure_Empty_Result_204()
   {
     Mock<FlightService> mockService = new();
 
     mockService
       .Setup(s => s.GetFlightByFlightNumber(0))
-      .Throws(new FlightNotFoundException());
+      .Returns(Task.FromResult<FlightView?>(null));
 
     FlightsController controller = new(mockService.Object);
 
-    ObjectResult? response = await controller.GetFlightByFlightNumber(0) as ObjectResult;
+    StatusCodeResult? response = await controller.GetFlightByFlightNumber(0) as StatusCodeResult;
 
     Assert.IsNotNull(response);
-    Assert.AreEqual((int)HttpStatusCode.NotFound, response.StatusCode);
-    Assert.AreEqual("The flight was not found in the database", response.Value);
+    Assert.AreEqual((int)HttpStatusCode.NoContent, response.StatusCode);
   }
 
   [TestMethod]
-  [DataRow(-1)]
-  [DataRow(1)]
-  public async Task GetFlightByFlightNumber_Failure_ArugumentException_400(int flightNumber)
+  public async Task GetFlightByFlightNumber_Failure_ArugumentException_400()
   {
     Mock<FlightService> mockService = new();
 
-    mockService
-      .Setup(s => s.GetFlightByFlightNumber(1))
-      .Throws(new ArgumentException());
-
     FlightsController controller = new(mockService.Object);
 
-    ObjectResult? response = await controller.GetFlightByFlightNumber(flightNumber) as ObjectResult;
+    ObjectResult? response = await controller.GetFlightByFlightNumber(-1) as ObjectResult;
 
     Assert.IsNotNull(response);
     Assert.AreEqual((int)HttpStatusCode.BadRequest, response.StatusCode);
-    Assert.AreEqual("Bad request", response.Value);
+    Assert.AreEqual("Bad request - Negative flight number", response.Value);
   }
 }
 

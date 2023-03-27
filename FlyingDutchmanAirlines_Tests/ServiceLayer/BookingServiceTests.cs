@@ -111,9 +111,9 @@ public class BookingServiceTests
   [TestMethod]
   public async Task CreateBooking_Failure_FlightNotInDatabase()
   {
-    _mockFlightRepository
-      .Setup(repository => repository.GetFlightByFlightNumber(1))
-      .Throws(new FlightNotFoundException());
+    //_mockFlightRepository
+    //  .Setup(repository => repository.GetFlightByFlightNumber(1))
+    //  .Throws(new FlightNotFoundException());
 
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
     (bool result, Exception? exception) = await service.CreateBooking("Maurits Escher", 1);
@@ -183,17 +183,18 @@ public class BookingServiceTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(BookingNotFoundException))]
-  public async Task DeleteBooking_Failure_BookingNotFoundException()
+  public async Task DeleteBooking_Failure_Returns_Null()
   {
     int bookingId = 1;
     _mockBookingRepository
       .Setup(repository => repository.DeleteBooking(bookingId))
-      .ThrowsAsync(new BookingNotFoundException());
+      .Returns(Task.FromResult<Booking?>(null));
 
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
-    await service.DeleteBooking(bookingId);
+    var deletedBooking = await service.DeleteBooking(bookingId);
+
+    Assert.IsNull(deletedBooking);
   }
 
   [TestMethod]
@@ -238,7 +239,7 @@ public class BookingServiceTests
 
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
-    BookingView bookingView = await service.GetBookingById(1);
+    var bookingView = await service.GetBookingById(1);
 
     Assert.IsNotNull(bookingView);
     Assert.AreEqual(bookingView.BookingId, 1);

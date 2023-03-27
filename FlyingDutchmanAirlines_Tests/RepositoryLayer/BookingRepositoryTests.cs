@@ -30,7 +30,7 @@ public class BookingRepositoryTests
   public async Task CreateBooking_Success()
   {
     await _repository.CreateBooking(1, 0);
-    Booking booking = _context.Bookings.First();
+    var booking = _context.Bookings.First();
 
     Assert.IsNotNull(booking);
     Assert.AreEqual(1, booking.CustomerId);
@@ -58,7 +58,7 @@ public class BookingRepositoryTests
   public async Task DeleteBooking_Success()
   {
     await _repository.CreateBooking(1, 0);
-    Booking booking = _context.Bookings.First();
+    var booking = _context.Bookings.First();
 
     await _repository.DeleteBooking(booking.BookingId);
 
@@ -73,37 +73,40 @@ public class BookingRepositoryTests
   }
 
   [TestMethod]
-  [ExpectedException(typeof(BookingNotFoundException))]
-  public async Task DeleteBooking_Failure_BookingNotFound()
+  public async Task DeleteBooking_Failure_Returns_Null()
   {
-    await _repository.DeleteBooking(1);
+    var deletedBooking = await _repository.DeleteBooking(1);
+
+    Assert.IsNull(deletedBooking);
   }
 
   [TestMethod]
   public async Task GetBookingById_Success()
   {
     await _repository.CreateBooking(1, 0);
-    Booking dbBooking = _context.Bookings.First();
+    var dbBooking = _context.Bookings.First();
 
-    Booking booking = await _repository.GetBookingById(dbBooking.BookingId);
+    var booking = await _repository.GetBookingById(dbBooking.BookingId);
 
     Assert.AreSame(dbBooking, booking);
   }
 
   [TestMethod]
-  [ExpectedException(typeof(BookingNotFoundException))]
   public async Task GetBookingById_Failure_BookingNotFoundException_NoBookingsInDatabase()
   {
-    await _repository.GetBookingById(1);
+    var booking = await _repository.GetBookingById(1);
+
+    Assert.IsNull(booking);
   }
 
   [TestMethod]
-  [ExpectedException(typeof(BookingNotFoundException))]
   public async Task GetBookingById_Failure_BookingNotFoundException_Wrong_Id()
   {
     await _repository.CreateBooking(1, 0);
 
-    await _repository.GetBookingById(2);
+    var booking = await _repository.GetBookingById(2);
+
+    Assert.IsNull(booking);
   }
 }
 
