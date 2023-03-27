@@ -5,6 +5,7 @@ using FlyingDutchmanAirlines.ControllerLayer.JsonData;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Views;
 using System;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines.ControllerLayer;
 
@@ -26,6 +27,11 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> CreateBooking([FromBody] BookingData body, int flightNumber)
   {
+    if (int.IsNegative(flightNumber))
+    {
+      return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative flight number");
+    }
+
     try
     {
       var name = $"{body.FirstName} {body.LastName}";
@@ -79,13 +85,13 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<IActionResult> GetBookingById(int bookingId)
   {
+    if (int.IsNegative(bookingId))
+    {
+      return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative booking id");
+    }
+
     try
     {
-      if (!ModelState.IsValid || int.IsNegative(bookingId))
-      {
-        return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative booking number");
-      }
-
       var booking = await _bookingService.GetBookingById(bookingId);
 
       return StatusCode((int)HttpStatusCode.OK, booking);
@@ -96,13 +102,18 @@ public class BookingsController : ControllerBase
     }
   }
 
-  [HttpDelete("{bookingId}")]
+  [HttpDelete("{bookingId:int}")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status204NoContent)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> DeleteBooking(int bookingId)
   {
+    if (int.IsNegative(bookingId))
+    {
+      return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative booking id");
+    }
+
     try
     {
       var deletedBooking = await _bookingService.DeleteBooking(bookingId);
