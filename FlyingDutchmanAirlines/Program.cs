@@ -29,15 +29,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(swagger =>
+    app.UseSwaggerUI(options =>
     {
-      swagger.SwaggerEndpoint("/swagger/v1/swagger.json", "Flying Dutchman Airlines");
+      options.SwaggerEndpoint("/swagger/v1/swagger.json", "Flying Dutchman Airlines");
+      options.RoutePrefix = string.Empty;
     });
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 app.MapControllers();
 
