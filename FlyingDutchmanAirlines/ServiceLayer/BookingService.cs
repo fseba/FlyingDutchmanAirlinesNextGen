@@ -81,8 +81,8 @@ public class BookingService
 
       var flight = await _flightRepository.GetFlightByFlightNumber(booking!.FlightNumber);
 
-      var originAirport = await _airportRepository.GetAirportByID(flight!.Origin);
-      var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+      var originAirport = await _airportRepository.GetAirportById(flight!.Origin);
+      var destinationAirport = await _airportRepository.GetAirportById(flight.Destination);
 
       FlightView flightView = new(flight.FlightNumber,
                                  (originAirport!.City, originAirport.Iata),
