@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using FlyingDutchmanAirlines.ControllerLayer.JsonData;
 using FlyingDutchmanAirlines.ServiceLayer;
-using FlyingDutchmanAirlines.Exceptions;
 using FlyingDutchmanAirlines.Views;
 using System;
 
@@ -27,12 +26,24 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> CreateBooking([FromBody] BookingData body, int flightNumber)
   {
-    var name = $"{body.FirstName} {body.LastName}";
-    (bool result, Exception? exception) = await _bookingService.CreateBooking(name, flightNumber);
+    try
+    {
+      var name = $"{body.FirstName} {body.LastName}";
 
-    return (result && exception == null)
-      ? StatusCode((int)HttpStatusCode.Created, $"Booking created - Flight {flightNumber} booked for {name}")
-      : StatusCode((int)HttpStatusCode.InternalServerError, exception!.Message);
+      bool result = await _bookingService.CreateBooking(name, flightNumber);
+
+      return result
+        ? StatusCode((int)HttpStatusCode.Created, $"Booking created - Flight {flightNumber} booked for {name}")
+        : StatusCode((int)HttpStatusCode.InternalServerError, "The booking creation process encountered an error and was unable to complete");
+    }
+    catch (ArgumentException ex)
+    {
+      return StatusCode((int)HttpStatusCode.BadRequest, ex.Message);
+    }
+    catch (Exception ex)
+    {
+      return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+    }
   }
 
   [HttpPost]
