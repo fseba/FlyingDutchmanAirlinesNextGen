@@ -34,8 +34,8 @@ public class FlightService
 
     foreach (Flight flight in flights)
     {
-      var originAirport = await _airportRepository.GetAirportByID(flight.Origin) ?? new Airport();
-      var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination) ?? new Airport();
+      var originAirport = await GetAirportOrDefault(flight.Origin);
+      var destinationAirport = await GetAirportOrDefault(flight.Destination);
 
 
       yield return new FlightView(flight.FlightNumber,
@@ -53,12 +53,18 @@ public class FlightService
       return null;
     }
 
-    var originAirport = await _airportRepository.GetAirportByID(flight.Origin);
-    var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+    var originAirport = await GetAirportOrDefault(flight.Origin);
+    var destinationAirport = await GetAirportOrDefault(flight.Destination);
 
     return new FlightView(flight.FlightNumber,
                          (originAirport!.City, originAirport.Iata),
                          (destinationAirport!.City, destinationAirport.Iata));
   }
+
+  private async Task<Airport> GetAirportOrDefault(int airportNumber)
+  {
+    return await _airportRepository.GetAirportById(airportNumber) ?? new Airport() { City = "No City found", Iata = "No Iata found" };
+  }
+
 }
 
