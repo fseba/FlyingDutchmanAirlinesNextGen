@@ -75,7 +75,7 @@ public class AirportRepositoryTests
   [DataRow(3)]
   public async Task GetAirportByID_Success(int airportId)
   {
-    var airport = await _repository.GetAirportByID(airportId);
+    var airport = await _repository.GetAirportById(airportId);
     Assert.IsNotNull(airport);
 
     var dbAirport = _context.Airports.First(a => a.AirportId == airportId);
@@ -89,13 +89,13 @@ public class AirportRepositoryTests
   [ExpectedException(typeof(ArgumentException))]
   public async Task GetAirportByID_Failure_InvalidInput()
   {
-    await _repository.GetAirportByID(-1);
+    await _repository.GetAirportById(-1);
   }
 
   [TestMethod]
   public async Task GetAirportByID_Failure_UnknownID()
   {
-    var airport = await _repository.GetAirportByID(10);
+    var airport = await _repository.GetAirportById(10);
 
     Assert.IsNull(airport);
   }

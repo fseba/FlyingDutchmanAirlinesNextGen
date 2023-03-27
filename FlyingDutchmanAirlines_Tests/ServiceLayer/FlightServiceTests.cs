@@ -38,7 +38,7 @@ public class FlightServiceTests
       .ReturnsAsync(flightInDatabase);
 
     _mockAirportRepository
-      .Setup(repository => repository.GetAirportByID(31))
+      .Setup(repository => repository.GetAirportById(31))
       .ReturnsAsync(new Airport
       {
         AirportId = 31,
@@ -47,7 +47,7 @@ public class FlightServiceTests
       });
 
     _mockAirportRepository
-      .Setup(repository => repository.GetAirportByID(92))
+      .Setup(repository => repository.GetAirportById(92))
       .ReturnsAsync(new Airport
       {
         AirportId = 92,
@@ -117,6 +117,30 @@ public class FlightServiceTests
     FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
 
     await service.GetFlightByFlightNumber(-1);
+  }
+
+  [TestMethod]
+  public async Task GetFlights_Failure_Airport_Null()
+  {
+    _mockAirportRepository
+      .Setup(repository => repository.GetAirportById(31))
+      .Returns(Task.FromResult<Airport?>(null));
+
+    _mockAirportRepository
+      .Setup(repository => repository.GetAirportById(92))
+      .Returns(Task.FromResult<Airport?>(null));
+
+    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
+
+    await foreach (FlightView flightView in service.GetFlights())
+    {
+      Assert.IsNotNull(flightView);
+      Assert.AreEqual(flightView.FlightNumber, 148);
+      Assert.AreEqual(flightView.Origin.City, "No City found");
+      Assert.AreEqual(flightView.Origin.Code, "No Iata found");
+      Assert.AreEqual(flightView.Destination.City, "No City found");
+      Assert.AreEqual(flightView.Destination.Code, "No Iata found");
+    }
   }
 }
 

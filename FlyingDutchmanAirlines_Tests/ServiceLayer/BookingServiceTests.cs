@@ -220,7 +220,7 @@ public class BookingServiceTests
       });
 
     _mockAirportRepository
-      .Setup(repository => repository.GetAirportByID(31))
+      .Setup(repository => repository.GetAirportById(31))
       .ReturnsAsync(new Airport
       {
         AirportId = 31,
@@ -229,7 +229,7 @@ public class BookingServiceTests
       });
 
     _mockAirportRepository
-      .Setup(repository => repository.GetAirportByID(92))
+      .Setup(repository => repository.GetAirportById(92))
       .ReturnsAsync(new Airport
       {
         AirportId = 92,
