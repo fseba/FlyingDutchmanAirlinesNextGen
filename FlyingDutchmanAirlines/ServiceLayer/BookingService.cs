@@ -58,62 +58,60 @@ public class BookingService
     }
   }
 
-  public virtual async Task DeleteBooking(int bookingId)
+  public virtual async Task<Booking?> DeleteBooking(int bookingId)
   {
     if (int.IsNegative(bookingId))
     {
       throw new ArgumentException("Invalid booking id - Is negative");
     }
 
-    await _bookingRepository.DeleteBooking(bookingId);
+    return await _bookingRepository.DeleteBooking(bookingId);
   }
 
-  public virtual async Task<BookingView> GetBookingById(int bookingId)
+  public virtual async Task<BookingView?> GetBookingById(int bookingId)
   {
     if (int.IsNegative(bookingId))
     {
       throw new ArgumentException("Invalid booking id - Is negative");
     }
 
-    var booking = await _bookingRepository.GetBookingById(bookingId);
+    try
+    {
+      var booking = await _bookingRepository.GetBookingById(bookingId);
 
-    var flight = await _flightRepository.GetFlightByFlightNumber(booking.FlightNumber);
-    var originAirport = await _airportRepository.GetAirportByID(flight.Origin);
-    var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
+      var flight = await _flightRepository.GetFlightByFlightNumber(booking!.FlightNumber);
 
-    FlightView flightView = new(flight.FlightNumber,
-                               (originAirport.City, originAirport.Iata),
-                               (destinationAirport.City, destinationAirport.Iata));
+      var originAirport = await _airportRepository.GetAirportByID(flight!.Origin);
+      var destinationAirport = await _airportRepository.GetAirportByID(flight.Destination);
 
-    return new BookingView(bookingId, booking.Customer!.CustomerId, booking.Customer.Name, flightView);
+      FlightView flightView = new(flight.FlightNumber,
+                                 (originAirport!.City, originAirport.Iata),
+                                 (destinationAirport!.City, destinationAirport.Iata));
+
+      return new BookingView(bookingId, booking.Customer!.CustomerId, booking.Customer.Name, flightView);
+    }
+    catch (NullReferenceException)
+    {
+      return null;
+    }
   }
 
-  public virtual async IAsyncEnumerable<BookingView> GetBookingsByCustomerName(string customerName)
+  public virtual async IAsyncEnumerable<BookingView?> GetBookingsByCustomerName(string customerName)
   {
-    var customer = await _customerRepository.GetCustomerByName(customerName)
-        ?? throw new BookingNotFoundException($"Customer {customerName} not found");
+    var customer = await _customerRepository.GetCustomerByName(customerName);
 
-    if (!customer.Bookings.Any())
+    if (customer is not null && customer.Bookings.Any())
     {
-      throw new BookingNotFoundException($"No bookings for {customerName} in database");
-    }
-
-    foreach (Booking booking in customer.Bookings)
-    {
-      yield return await GetBookingById(booking.BookingId);
+      foreach (Booking booking in customer.Bookings)
+      {
+        yield return await GetBookingById(booking.BookingId);
+      }
     }
   }
 
   private async Task<bool> FlightExistsInDatabase(int flightNumber)
   {
-    try
-    {
-      return await _flightRepository.GetFlightByFlightNumber(flightNumber) != null;
-    }
-    catch (FlightNotFoundException)
-    {
-      return false;
-    }
+    return await _flightRepository.GetFlightByFlightNumber(flightNumber) != null;
   }
 
   private async Task<Customer?> AddCustomerToDatabase(string name)
