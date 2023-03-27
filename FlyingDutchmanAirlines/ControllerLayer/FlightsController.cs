@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Views;
-using FlyingDutchmanAirlines.Exceptions;
 
 namespace FlyingDutchmanAirlines.ControllerLayer;
 

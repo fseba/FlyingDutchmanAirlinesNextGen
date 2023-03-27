@@ -20,14 +20,12 @@
 
   <ItemGroup>
     <None Remove="RepositoryLayer\" />
-    <None Remove="Exceptions\" />
     <None Remove="ServiceLayer\" />
     <None Remove="Views\" />
     <None Remove="ControllerLayer\JsonData\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RepositoryLayer\" />
-    <Folder Include="Exceptions\" />
     <Folder Include="ServiceLayer\" />
     <Folder Include="Views\" />
     <Folder Include="ControllerLayer\JsonData\" />
