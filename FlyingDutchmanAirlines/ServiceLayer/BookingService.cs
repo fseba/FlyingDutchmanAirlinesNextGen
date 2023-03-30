@@ -42,10 +42,18 @@ public class BookingService
       return false;
     }
 
-    var customer = await _customerRepository.GetCustomerByName(customerName)
-        ?? await AddCustomerToDatabase(customerName);
+    var customer = await _customerRepository.GetCustomerByName(customerName);
 
-    return await _bookingRepository.CreateBooking(customer!.CustomerId, flightNumber);
+    if (customer is null)
+    {
+      customer = Customer.Create(customerName) ?? throw new ArgumentException("Could not create customer - Please check customer name");
+
+      bool customerSuccessfullyAdded = await _customerRepository.AddCustomer(customer);
+
+      if (!customerSuccessfullyAdded) return false;
+    }
+
+    return await _bookingRepository.CreateBooking(customer.CustomerId, flightNumber);
   }
 
   public virtual async Task<Booking?> DeleteBooking(int bookingId)
@@ -102,12 +110,6 @@ public class BookingService
   private async Task<bool> FlightExistsInDatabase(int flightNumber)
   {
     return await _flightRepository.GetFlightByFlightNumber(flightNumber) != null;
-  }
-
-  private async Task<Customer?> AddCustomerToDatabase(string name)
-  {
-    await _customerRepository.CreateCustomer(name);
-    return await _customerRepository.GetCustomerByName(name);
   }
 }
 
