@@ -63,7 +63,7 @@ public class BookingsController : ControllerBase
     {
       var customerName = $"{body.FirstName} {body.LastName}";
 
-      var bookings = new Queue<BookingView?>();
+      Queue<BookingView?> bookings = new();
       await foreach (BookingView? booking in _bookingService.GetBookingsByCustomerName(customerName))
       {
         bookings.Enqueue(booking);
@@ -120,8 +120,8 @@ public class BookingsController : ControllerBase
     {
       var deletedBooking = await _bookingService.DeleteBooking(bookingId);
 
-      return deletedBooking is not null
-        ? StatusCode((int)HttpStatusCode.OK, $"Booking {deletedBooking.BookingId} for {deletedBooking.Customer!.Name} successfully deleted")
+      return deletedBooking
+        ? StatusCode((int)HttpStatusCode.OK, $"Booking {bookingId} successfully deleted")
         : StatusCode((int)HttpStatusCode.NotFound);
     }
     catch (ArgumentException)
