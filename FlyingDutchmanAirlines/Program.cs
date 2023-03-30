@@ -1,7 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.ServiceLayer;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
