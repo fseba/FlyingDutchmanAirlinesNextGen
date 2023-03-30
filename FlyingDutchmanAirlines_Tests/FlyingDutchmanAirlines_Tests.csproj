@@ -30,6 +30,7 @@
     <None Remove="Views\" />
     <None Remove="ControllerLayer\" />
     <None Remove="ControllerLayer\JsonData\" />
+    <None Remove="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Stubs\" />
@@ -38,5 +39,6 @@
     <Folder Include="Views\" />
     <Folder Include="ControllerLayer\" />
     <Folder Include="ControllerLayer\JsonData\" />
+    <Folder Include="Models\" />
   </ItemGroup>
 </Project>

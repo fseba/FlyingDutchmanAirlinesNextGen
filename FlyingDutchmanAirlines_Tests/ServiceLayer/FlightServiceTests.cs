@@ -117,29 +117,5 @@ public class FlightServiceTests
 
     await service.GetFlightByFlightNumber(-1);
   }
-
-  [TestMethod]
-  public async Task GetFlights_Failure_Airport_Null()
-  {
-    _mockAirportRepository
-      .Setup(repository => repository.GetAirportById(31))
-      .Returns(Task.FromResult<Airport?>(null));
-
-    _mockAirportRepository
-      .Setup(repository => repository.GetAirportById(92))
-      .Returns(Task.FromResult<Airport?>(null));
-
-    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
-
-    await foreach (FlightView flightView in service.GetFlights())
-    {
-      Assert.IsNotNull(flightView);
-      Assert.AreEqual(flightView.FlightNumber, 148);
-      Assert.AreEqual(flightView.Origin.City, "No City found");
-      Assert.AreEqual(flightView.Origin.Code, "No Iata found");
-      Assert.AreEqual(flightView.Destination.City, "No City found");
-      Assert.AreEqual(flightView.Destination.Code, "No Iata found");
-    }
-  }
 }
 

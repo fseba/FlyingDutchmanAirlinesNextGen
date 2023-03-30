@@ -23,8 +23,8 @@ public class CustomerRepositoryTests
 
     _context = new FlyingDutchmanAirlinesContext(dbContextOptions);
 
-    Customer testCustomer = new("Linus Torvalds");
-    _context.Customers.Add(testCustomer);
+    var testCustomer = Customer.Create("Linus Torvalds");
+    _context.Customers.Add(testCustomer!);
     await _context.SaveChangesAsync();
 
     _repository = new CustomerRepository(_context);
@@ -34,38 +34,11 @@ public class CustomerRepositoryTests
   [TestMethod]
   public async Task CreateCustomer_Success()
   {
-    bool result = await _repository.CreateCustomer("Donald Knuth");
+    var newCustomer = Customer.Create("Donald Knuth");
+
+    bool result = await _repository.AddCustomer(newCustomer!);
+
     Assert.IsTrue(result);
-  }
-
-  [TestMethod]
-  public async Task CreateCustomer_Failure_NameIsNull()
-  {
-    bool result = await _repository.CreateCustomer(null!);
-    Assert.IsFalse(result);
-  }
-
-  [TestMethod]
-  public async Task CreateCustomer_Failure_NameIsEmptyString()
-  {
-    bool result = await _repository.CreateCustomer(string.Empty);
-    Assert.IsFalse(result);
-  }
-
-  [TestMethod]
-  [DataRow('!')]
-  [DataRow('@')]
-  [DataRow('#')]
-  [DataRow('$')]
-  [DataRow('%')]
-  [DataRow('&')]
-  [DataRow('*')]
-  [DataRow('/')]
-  [DataRow('=')]
-  public async Task CreateCustomer_Failure_NameContainsInvalidCharacters(char invalidCharacter)
-  {
-    bool result = await _repository.CreateCustomer($"Donald Knuth{invalidCharacter}");
-    Assert.IsFalse(result);
   }
 
   [TestMethod]
@@ -74,7 +47,9 @@ public class CustomerRepositoryTests
     CustomerRepository repository = new(null!);
     Assert.IsNotNull(repository);
 
-    bool result = await repository.CreateCustomer("Donald Knuth");
+    var newCustomer = Customer.Create("Donald Knuth");
+
+    bool result = await repository.AddCustomer(newCustomer!);
     Assert.IsFalse(result);
   }
 
