@@ -19,6 +19,24 @@ public sealed class Customer
     Name = name;
   }
 
+  public static Customer? Create(string name)
+  {
+    if (IsInvalidCustomerName(name))
+    {
+      return null; 
+    }
+
+    var newCustomer = new Customer(name);
+
+    return newCustomer;
+  }
+
+  private static bool IsInvalidCustomerName(string name)
+  {
+    char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*', '/', '=' };
+    return string.IsNullOrWhiteSpace(name) || name.Any(c => forbiddenCharacters.Contains(c));
+  }
+
   public static bool operator == (Customer x, Customer y)
   {
     CustomerEqualityComparer comparer = new();
