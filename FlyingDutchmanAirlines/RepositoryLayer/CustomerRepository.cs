@@ -25,18 +25,16 @@ public class CustomerRepository
     }
   }
 
-  public virtual async Task<bool> CreateCustomer(string name)
+  public virtual async Task<bool> AddCustomer(Customer customer)
   {
-    if (IsInvalidCustomerName(name))
+    if (customer is null)
     {
       return false;
     }
 
     try
     {
-      var newCustomer = new Customer(name);
-
-      _context.Customers.Add(newCustomer);
+      _context.Customers.Add(customer);
       await _context.SaveChangesAsync();
     }
     catch (Exception ex)
