@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+
 using FlyingDutchmanAirlines.DatabaseLayer;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines_Tests.Stubs;
-using Microsoft.EntityFrameworkCore;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 
@@ -73,11 +72,11 @@ public class BookingRepositoryTests
   }
 
   [TestMethod]
-  public async Task DeleteBooking_Failure_Returns_Null()
+  public async Task DeleteBooking_Failure_Returns_False()
   {
-    var deletedBooking = await _repository.DeleteBooking(1);
+    var result = await _repository.DeleteBooking(1);
 
-    Assert.IsNull(deletedBooking);
+    Assert.IsFalse(result);
   }
 
   [TestMethod]

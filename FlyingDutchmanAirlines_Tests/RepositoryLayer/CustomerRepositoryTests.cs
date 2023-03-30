@@ -1,10 +1,8 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory;
+
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using System.Diagnostics.CodeAnalysis;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 

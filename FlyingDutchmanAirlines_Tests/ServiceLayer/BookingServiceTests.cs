@@ -1,12 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Moq;
-using FlyingDutchmanAirlines_Tests.Stubs;
-using FlyingDutchmanAirlines.DatabaseLayer;
+﻿using Moq;
+
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.Views;
 
 namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
 
@@ -103,17 +99,17 @@ public class BookingServiceTests
   }
 
   [TestMethod]
-  public async Task DeleteBooking_Failure_Returns_Null()
+  public async Task DeleteBooking_Failure_Returns_False()
   {
     int bookingId = 1;
     _mockBookingRepository
       .Setup(repository => repository.DeleteBooking(bookingId))
-      .Returns(Task.FromResult<Booking?>(null));
+      .ReturnsAsync(false);
 
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object, _mockAirportRepository.Object);
 
-    var deletedBooking = await service.DeleteBooking(bookingId);
+    var result = await service.DeleteBooking(bookingId);
 
-    Assert.IsNull(deletedBooking);
+    Assert.IsFalse(result);
   }
 }

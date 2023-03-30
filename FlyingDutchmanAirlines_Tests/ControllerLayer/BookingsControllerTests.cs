@@ -5,7 +5,6 @@ using Moq;
 using FlyingDutchmanAirlines.ControllerLayer;
 using FlyingDutchmanAirlines.ControllerLayer.JsonData;
 using FlyingDutchmanAirlines.ServiceLayer;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 
@@ -59,7 +58,7 @@ public class BookingsControllerTests
 
     mockService
       .Setup(service => service.DeleteBooking(1))
-      .ReturnsAsync(new Booking() { BookingId = 1, Customer = new("Bob Bobson") });
+      .ReturnsAsync(true);
 
     BookingsController controller = new(mockService.Object);
 
@@ -67,7 +66,7 @@ public class BookingsControllerTests
 
     Assert.IsNotNull(response);
     Assert.AreEqual((int)HttpStatusCode.OK, response.StatusCode);
-    Assert.AreEqual("Booking 1 for Bob Bobson successfully deleted", response.Value);
+    Assert.AreEqual("Booking 1 successfully deleted", response.Value);
   }
 }
 
