@@ -8,16 +8,11 @@ public sealed class Customer
 #pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 #pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
 {
-  public int CustomerId { get; set; }
+  public int CustomerId { get; private set; }
 
-  public string Name { get; set; } = null!;
+  public string Name { get; private set; } = null!;
 
   public ICollection<Booking> Bookings { get; } = new List<Booking>();
-
-  public Customer(string name)
-  {
-    Name = name;
-  }
 
   public static Customer? Create(string name)
   {
@@ -26,9 +21,7 @@ public sealed class Customer
       return null; 
     }
 
-    var newCustomer = new Customer(name);
-
-    return newCustomer;
+    return new Customer { Name = name};
   }
 
   private static bool IsInvalidCustomerName(string name)
