@@ -20,7 +20,7 @@ public class FlightsController : ControllerBase
 
   [HttpGet]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Queue<FlightView>))]
-  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetFlights()
   {
@@ -34,7 +34,7 @@ public class FlightsController : ControllerBase
 
       return flights.Count != 0
         ? StatusCode((int)HttpStatusCode.OK, flights)
-        : StatusCode((int)HttpStatusCode.NoContent);
+        : StatusCode((int)HttpStatusCode.NotFound);
     }
     catch (Exception ex)
     {
@@ -44,7 +44,7 @@ public class FlightsController : ControllerBase
 
   [HttpGet("{flightNumber}")]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FlightView))]
-  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetFlightByFlightNumber(int flightNumber)
@@ -60,7 +60,7 @@ public class FlightsController : ControllerBase
 
       return flight is not null
         ? StatusCode((int)HttpStatusCode.OK, flight)
-        : StatusCode((int)HttpStatusCode.NoContent);
+        : StatusCode((int)HttpStatusCode.NotFound);
     }
     catch (Exception ex)
     {

@@ -50,7 +50,7 @@ public class FlightsControllerTests
   }
 
   [TestMethod]
-  public async Task GetFlight_Failure_Empty_Result_204()
+  public async Task GetFlight_Failure_Empty_Result_404()
   {
     Mock<FlightService> mockService = new();
 
@@ -65,7 +65,7 @@ public class FlightsControllerTests
     StatusCodeResult? response = await controller.GetFlights() as StatusCodeResult;
 
     Assert.IsNotNull(response);
-    Assert.AreEqual((int)HttpStatusCode.NoContent, response.StatusCode);
+    Assert.AreEqual((int)HttpStatusCode.NotFound, response.StatusCode);
   }
 
   [TestMethod]
@@ -109,7 +109,7 @@ public class FlightsControllerTests
   }
 
   [TestMethod]
-  public async Task GetFlightByFlightNumber_Failure_Empty_Result_204()
+  public async Task GetFlightByFlightNumber_Failure_Empty_Result_404()
   {
     Mock<FlightService> mockService = new();
 
@@ -122,7 +122,7 @@ public class FlightsControllerTests
     StatusCodeResult? response = await controller.GetFlightByFlightNumber(0) as StatusCodeResult;
 
     Assert.IsNotNull(response);
-    Assert.AreEqual((int)HttpStatusCode.NoContent, response.StatusCode);
+    Assert.AreEqual((int)HttpStatusCode.NotFound, response.StatusCode);
   }
 
   [TestMethod]

@@ -54,7 +54,7 @@ public class BookingsController : ControllerBase
 
   [HttpPost]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingView))]
-  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetBookingsByCustomerName([FromBody] BookingData body)
@@ -71,7 +71,7 @@ public class BookingsController : ControllerBase
 
       return bookings.Count != 0
         ? StatusCode((int)HttpStatusCode.OK, bookings)
-        : StatusCode((int)HttpStatusCode.NoContent);
+        : StatusCode((int)HttpStatusCode.NotFound);
     }
     catch (Exception ex)
     {
@@ -81,7 +81,7 @@ public class BookingsController : ControllerBase
 
   [HttpGet("{bookingId:int}")]
   [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingView))]
-  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<IActionResult> GetBookingById(int bookingId)
   {
@@ -94,7 +94,9 @@ public class BookingsController : ControllerBase
     {
       var booking = await _bookingService.GetBookingById(bookingId);
 
-      return StatusCode((int)HttpStatusCode.OK, booking);
+      return booking is not null
+        ? StatusCode((int)HttpStatusCode.OK, booking)
+        : StatusCode((int)HttpStatusCode.NotFound);
     }
     catch (Exception ex)
     {
@@ -104,7 +106,7 @@ public class BookingsController : ControllerBase
 
   [HttpDelete("{bookingId:int}")]
   [ProducesResponseType(StatusCodes.Status200OK)]
-  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> DeleteBooking(int bookingId)
@@ -120,7 +122,7 @@ public class BookingsController : ControllerBase
 
       return deletedBooking is not null
         ? StatusCode((int)HttpStatusCode.OK, $"Booking {deletedBooking.BookingId} for {deletedBooking.Customer!.Name} successfully deleted")
-        : StatusCode((int)HttpStatusCode.NoContent);
+        : StatusCode((int)HttpStatusCode.NotFound);
     }
     catch (ArgumentException)
     {
