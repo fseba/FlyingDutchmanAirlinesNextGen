@@ -2,7 +2,6 @@ using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.ServiceLayer;
 using Microsoft.EntityFrameworkCore;
-using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 

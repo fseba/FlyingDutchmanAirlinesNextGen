@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using FlyingDutchmanAirlines.ControllerLayer.JsonData;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Views;
-using System;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines.ControllerLayer;
 
