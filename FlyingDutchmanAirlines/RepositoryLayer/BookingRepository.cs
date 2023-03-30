@@ -55,7 +55,7 @@ public class BookingRepository
                                   .FirstOrDefaultAsync(b => b.BookingId == bookingId);
   }
 
-  public virtual async Task<Booking?> DeleteBooking(int bookingId)
+  public virtual async Task<bool> DeleteBooking(int bookingId)
   {
     if (int.IsNegative(bookingId))
     {
@@ -68,13 +68,13 @@ public class BookingRepository
 
     if (booking is null)
     {
-      return null; 
+      return false; 
     }
 
-    var deletedBooking = _context.Bookings.Remove(booking).Entity;
+    _context.Bookings.Remove(booking);
     await _context.SaveChangesAsync();
 
-    return deletedBooking;
+    return true;
   }
 }
 
