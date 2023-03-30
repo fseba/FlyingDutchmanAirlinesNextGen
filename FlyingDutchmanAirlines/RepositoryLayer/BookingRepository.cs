@@ -28,18 +28,7 @@ public class BookingRepository
 
   public virtual async Task<bool> CreateBooking(int customerId, int flightNumber)
   {
-    if (int.IsNegative(customerId) || int.IsNegative(flightNumber))
-    {
-      Console.WriteLine($"Argument Exception in CreateBooking! " +
-        $"Customer ID = {customerId}, flightNumber = {flightNumber}");
-      throw new ArgumentException("Invalid arguments provided");
-    }
-
-    var newBooking = new Booking() 
-    {
-      CustomerId = customerId,
-      FlightNumber = flightNumber
-    };
+    var newBooking = Booking.Create(customerId, flightNumber); 
 
     try
     {
