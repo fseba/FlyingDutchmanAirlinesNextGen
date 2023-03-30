@@ -26,7 +26,7 @@ public class FlightsController : ControllerBase
   {
     try
     {
-      var flights = new Queue<FlightView>();
+      Queue<FlightView> flights = new();
       await foreach (FlightView flight in _service.GetFlights())
       {
         flights.Enqueue(flight);
