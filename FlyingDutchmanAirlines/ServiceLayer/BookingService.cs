@@ -56,7 +56,7 @@ public class BookingService
     return await _bookingRepository.CreateBooking(customer.CustomerId, flightNumber);
   }
 
-  public virtual async Task<Booking?> DeleteBooking(int bookingId)
+  public virtual async Task<bool> DeleteBooking(int bookingId)
   {
     if (int.IsNegative(bookingId))
     {
