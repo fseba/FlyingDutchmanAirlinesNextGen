@@ -21,10 +21,10 @@ public sealed class Customer
       return null; 
     }
 
-    return new Customer { Name = name};
+    return new Customer { Name = name };
   }
 
-  private static bool IsInvalidCustomerName(string name)
+  public static bool IsInvalidCustomerName(string name)
   {
     char[] forbiddenCharacters = { '!', '@', '#', '$', '%', '&', '*', '/', '=' };
     return string.IsNullOrWhiteSpace(name) || name.Any(c => forbiddenCharacters.Contains(c));
