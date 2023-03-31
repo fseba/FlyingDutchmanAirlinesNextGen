@@ -47,7 +47,6 @@ public class BookingRepository
   {
     if (!await _context.Bookings.AnyAsync())
     {
-      Console.WriteLine("No bookings in database!");
       return null;
     }
 
@@ -59,9 +58,7 @@ public class BookingRepository
   {
     if (int.IsNegative(bookingId))
     {
-      Console.WriteLine($"Argument Exception in DeleteBooking! " +
-        $"Booking ID = {bookingId}");
-      throw new ArgumentException("Invalid argument provided");
+      throw new ArgumentException("Invalid booking id - Negative id");
     }
 
     var booking = await GetBookingById(bookingId);
