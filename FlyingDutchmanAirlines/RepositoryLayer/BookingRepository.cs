@@ -36,7 +36,7 @@ public class BookingRepository
       await _context.SaveChangesAsync();
       return true;
     }
-    catch (Exception ex)
+    catch (DbUpdateException ex)
     {
       Console.WriteLine($"Exception during database query: {ex.Message}");
       return false;
