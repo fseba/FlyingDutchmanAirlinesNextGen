@@ -30,16 +30,10 @@ public class BookingRepository
   {
     var newBooking = Booking.Create(customerId, flightNumber); 
 
-    try
-    {
-      _context.Bookings.Add(newBooking);
-      await _context.SaveChangesAsync();
-      return true;
-    }
-    catch (DbUpdateException ex)
-    {
-      return false;
-    }
+    _context.Bookings.Add(newBooking);
+    var result = await _context.SaveChangesAsync();
+
+    return result > 0;
   }
 
   public virtual async Task<Booking?> GetBookingById(int bookingId)
