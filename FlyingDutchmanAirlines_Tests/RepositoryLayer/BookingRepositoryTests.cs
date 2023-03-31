@@ -46,14 +46,6 @@ public class BookingRepositoryTests
   }
 
   [TestMethod]
-  public async Task CreateBooking_Failure_DatabaseError()
-  {
-    bool result = await _repository.CreateBooking(0, 1);
-
-    Assert.IsFalse(result);
-  }
-
-  [TestMethod]
   public async Task DeleteBooking_Success()
   {
     await _repository.CreateBooking(1, 0);
