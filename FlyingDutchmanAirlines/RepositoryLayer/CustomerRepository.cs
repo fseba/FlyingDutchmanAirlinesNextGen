@@ -35,15 +35,15 @@ public class CustomerRepository
     try
     {
       _context.Customers.Add(customer);
-      await _context.SaveChangesAsync();
+      var result = await _context.SaveChangesAsync();
+
+      return result > 0; 
     }
-    catch (Exception ex)
+    catch (DbUpdateException ex)
     {
       Console.WriteLine($"Error caught {ex.Message} - SaveChangesAsync failed");
       return false;
     }
-
-    return true;
   }
 
   public virtual async Task<Customer?> GetCustomerByName(string name)
