@@ -27,9 +27,8 @@ public class AirportRepository
 
   public virtual async Task<Airport?> GetAirportById(int airportId)
   {
-    if (int.IsNegative(airportId))
+    if (airportId < 0)
     {
-      Console.WriteLine($"Negativ Id in GetAirpotByID! Airport ID = {airportId}");
       throw new ArgumentException("Invalid AirportId - Negative id");
     }
 

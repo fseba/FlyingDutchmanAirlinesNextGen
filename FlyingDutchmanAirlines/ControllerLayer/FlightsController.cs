@@ -49,7 +49,7 @@ public class FlightsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetFlightByFlightNumber(int flightNumber)
   {
-    if (int.IsNegative(flightNumber))
+    if (flightNumber < 0)
     {
       return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative flight number");
     }

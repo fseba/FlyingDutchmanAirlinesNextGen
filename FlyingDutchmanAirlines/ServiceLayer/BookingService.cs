@@ -33,7 +33,7 @@ public class BookingService
 
   public virtual async Task<bool> CreateBooking(string customerName, int flightNumber)
   {
-    if (string.IsNullOrWhiteSpace(customerName) || int.IsNegative(flightNumber))
+    if (string.IsNullOrWhiteSpace(customerName) || flightNumber < 0)
     {
       throw new ArgumentException("Invalid flight number or empty username provided");
     }
@@ -59,7 +59,7 @@ public class BookingService
 
   public virtual async Task<bool> DeleteBooking(int bookingId)
   {
-    if (int.IsNegative(bookingId))
+    if (bookingId < 0)
     {
       throw new ArgumentException("Invalid booking id - Is negative");
     }
@@ -69,7 +69,7 @@ public class BookingService
 
   public virtual async Task<BookingView?> GetBookingById(int bookingId)
   {
-    if (int.IsNegative(bookingId))
+    if (bookingId < 0)
     {
       throw new ArgumentException("Invalid booking id - Is negative");
     }

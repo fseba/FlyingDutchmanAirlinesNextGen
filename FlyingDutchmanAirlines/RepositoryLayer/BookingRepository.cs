@@ -38,30 +38,29 @@ public class BookingRepository
     }
     catch (DbUpdateException ex)
     {
-      Console.WriteLine($"Exception during database query: {ex.Message}");
       return false;
     }
   }
 
   public virtual async Task<Booking?> GetBookingById(int bookingId)
   {
-    if (!await _context.Bookings.AnyAsync())
+    if (!await _context.Bookings.AnyAsync(b => b.BookingId == bookingId))
     {
       return null;
     }
 
-    return await _context.Bookings.Include("Customer")
+    return await _context.Bookings.Include(b => b.Customer)
                                   .FirstOrDefaultAsync(b => b.BookingId == bookingId);
   }
 
   public virtual async Task<bool> DeleteBooking(int bookingId)
   {
-    if (int.IsNegative(bookingId))
+    if (bookingId < 0)
     {
       throw new ArgumentException("Invalid booking id - Negative id");
     }
 
-    var booking = await GetBookingById(bookingId);
+    var booking = await _context.Bookings.FindAsync(bookingId);
 
     if (booking is null)
     {

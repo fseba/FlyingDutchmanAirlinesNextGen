@@ -50,7 +50,7 @@ public class CustomerRepository
   {
     return Customer.IsInvalidCustomerName(name)
       ? null
-      : await _context.Customers.Include("Bookings")
+      : await _context.Customers.Include(c => c.Bookings)
                                 .FirstOrDefaultAsync(c => c.Name == name);
   }
 }

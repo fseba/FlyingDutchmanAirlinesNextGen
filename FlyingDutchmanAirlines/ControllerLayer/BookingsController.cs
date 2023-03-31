@@ -25,7 +25,7 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> CreateBooking([FromBody] BookingData body, int flightNumber)
   {
-    if (int.IsNegative(flightNumber))
+    if (flightNumber < 0)
     {
       return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative flight number");
     }
@@ -83,7 +83,7 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<IActionResult> GetBookingById(int bookingId)
   {
-    if (int.IsNegative(bookingId))
+    if (bookingId < 0)
     {
       return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative booking id");
     }
@@ -109,7 +109,7 @@ public class BookingsController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> DeleteBooking(int bookingId)
   {
-    if (int.IsNegative(bookingId))
+    if (bookingId < 0)
     {
       return StatusCode((int)HttpStatusCode.BadRequest, "Bad request - Negative booking id");
     }

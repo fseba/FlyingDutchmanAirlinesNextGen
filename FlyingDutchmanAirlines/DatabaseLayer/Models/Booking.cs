@@ -14,7 +14,7 @@ public sealed class Booking
 
   public static Booking Create(int customerId, int flightNumber)
   {
-    if (int.IsNegative(customerId) || int.IsNegative(flightNumber))
+    if (customerId < 0 || flightNumber < 0)
     {
       throw new ArgumentException("Invalid arguments provided");
     }
