@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines_Tests.Stubs;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 
@@ -10,16 +12,16 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 public class CustomerRepositoryTests
 {
   private FlyingDutchmanAirlinesContext _context = null!;
-  private CustomerRepository _repository = null!; 
+  private CustomerRepository _repository = null!;
+  private DbContextOptions<FlyingDutchmanAirlinesContext> _dbContextOptions = null!;
 
   [TestInitialize]
   public async Task TestInitialize()
   {
-    DbContextOptions<FlyingDutchmanAirlinesContext> dbContextOptions =
-      new DbContextOptionsBuilder<FlyingDutchmanAirlinesContext>()
+    _dbContextOptions = new DbContextOptionsBuilder<FlyingDutchmanAirlinesContext>()
       .UseInMemoryDatabase("FlyingDutchman").Options;
 
-    _context = new FlyingDutchmanAirlinesContext(dbContextOptions);
+    _context = new FlyingDutchmanAirlinesContext(_dbContextOptions);
 
     var testCustomer = Customer.Create("Linus Torvalds");
     _context.Customers.Add(testCustomer!);
@@ -42,10 +44,12 @@ public class CustomerRepositoryTests
   [TestMethod]
   public async Task CreateCustomer_Failure_DatabaseAccessError()
   {
-    CustomerRepository repository = new(null!);
+    var _contextStub = new FlyingDutchmanAirlinesContext_Stub(_dbContextOptions);
+
+    CustomerRepository repository = new(_contextStub);
     Assert.IsNotNull(repository);
 
-    var newCustomer = Customer.Create("Donald Knuth");
+    var newCustomer = Customer.Create("Db Fail");
 
     bool result = await repository.AddCustomer(newCustomer!);
     Assert.IsFalse(result);

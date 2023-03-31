@@ -31,6 +31,16 @@ public class FlyingDutchmanAirlinesContext_Stub : FlyingDutchmanAirlinesContext
       throw new DbUpdateException("Database error!");
     }
 
+    IEnumerable<Customer> customers =
+      pendingChanges
+      .Select(c => c.Entity)
+      .OfType<Customer>();
+
+    if (customers.Any(c => c.Name == "Db Fail"))
+    {
+      throw new DbUpdateException("Database error!");
+    }
+
     return await base.SaveChangesAsync(cancellationToken);
   }
 }
