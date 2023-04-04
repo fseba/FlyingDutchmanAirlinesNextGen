@@ -14,6 +14,8 @@ public sealed class Customer
 
   public ICollection<Booking> Bookings { get; } = new List<Booking>();
 
+  private Customer() {  }
+
   public static Customer? Create(string name)
   {
     if (IsInvalidCustomerName(name))

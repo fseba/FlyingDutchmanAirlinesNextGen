@@ -12,6 +12,8 @@ public sealed class Booking
 
   public Flight FlightNumberNavigation { get; private set; } = null!;
 
+  private Booking() {  }
+
   public static Booking Create(int customerId, int flightNumber)
   {
     if (customerId < 0 || flightNumber < 0)
