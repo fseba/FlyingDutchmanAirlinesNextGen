@@ -67,7 +67,7 @@ public class BookingService
     return await _bookingRepository.DeleteBooking(bookingId);
   }
 
-  public virtual async Task<BookingView?> GetBookingById(int bookingId)
+  public virtual async Task<BookingView> GetBookingById(int bookingId)
   {
     if (bookingId < 0)
     {
@@ -89,9 +89,9 @@ public class BookingService
 
       return new BookingView(bookingId, booking.Customer!.CustomerId, booking.Customer.Name, flightView);
     }
-    catch (NullReferenceException)
+    catch (NullReferenceException ex)
     {
-      return null;
+      throw new NullReferenceException("Missing data in booking", ex.InnerException);
     }
   }
 
