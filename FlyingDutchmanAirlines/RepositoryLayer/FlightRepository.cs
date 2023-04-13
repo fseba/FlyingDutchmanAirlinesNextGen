@@ -33,7 +33,9 @@ public class FlightRepository
       throw new ArgumentException("Invalid flight number - Negative number");
     }
 
-    return await _context.Flights.FirstOrDefaultAsync(f => f.FlightNumber == flightNumber);
+    return await _context.Flights.Include(f => f.DestinationNavigation)
+                                 .Include(f => f.OriginNavigation)
+                                 .FirstOrDefaultAsync(f => f.FlightNumber == flightNumber);
   }
 
   public virtual async Task<Flight[]> GetFlights()
@@ -44,7 +46,9 @@ public class FlightRepository
       return Array.Empty<Flight>();
     }
 
-    return await _context.Flights.ToArrayAsync();
+    return await _context.Flights.Include(f => f.DestinationNavigation)
+                                 .Include(f => f.OriginNavigation)
+                                 .ToArrayAsync();
   }
 }
 
