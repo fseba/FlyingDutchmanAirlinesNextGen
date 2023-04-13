@@ -67,32 +67,25 @@ public class BookingService
     return await _bookingRepository.DeleteBooking(bookingId);
   }
 
-  public virtual async Task<BookingView> GetBookingById(int bookingId)
+  public virtual async Task<BookingView?> GetBookingById(int bookingId)
   {
     if (bookingId < 0)
     {
       throw new ArgumentException("Invalid booking id - Is negative");
     }
 
-    try
+    var booking = await _bookingRepository.GetBookingById(bookingId);
+
+    if (booking is null)
     {
-      var booking = await _bookingRepository.GetBookingById(bookingId);
-
-      var flight = await _flightRepository.GetFlightByFlightNumber(booking!.FlightNumber);
-
-      var originAirport = await _airportRepository.GetAirportById(flight!.Origin);
-      var destinationAirport = await _airportRepository.GetAirportById(flight.Destination);
-
-      FlightView flightView = new(flight.FlightNumber,
-                                 (originAirport!.City, originAirport.Iata),
-                                 (destinationAirport!.City, destinationAirport.Iata));
-
-      return new BookingView(bookingId, booking.Customer!.CustomerId, booking.Customer.Name, flightView);
+      return null;
     }
-    catch (NullReferenceException ex)
-    {
-      throw new NullReferenceException("Missing data in booking", ex.InnerException);
-    }
+
+    FlightView flightView = new(booking.FlightNumber,
+                               (booking.FlightNumberNavigation.OriginNavigation.City, booking.FlightNumberNavigation.OriginNavigation.Iata),
+                               (booking.FlightNumberNavigation.DestinationNavigation.City, booking.FlightNumberNavigation.DestinationNavigation.Iata));
+
+    return new BookingView(bookingId, booking.Customer!.CustomerId, booking.Customer.Name, flightView);
   }
 
   public virtual async IAsyncEnumerable<BookingView?> GetBookingsByCustomerName(string customerName)
