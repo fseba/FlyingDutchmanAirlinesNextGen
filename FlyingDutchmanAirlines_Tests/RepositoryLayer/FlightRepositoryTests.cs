@@ -27,14 +27,38 @@ public class FlightRepositoryTests
     {
       FlightNumber = 1,
       Origin = 1,
-      Destination = 2
+      Destination = 2,
+      OriginNavigation = new Airport
+      {
+        AirportId = 1,
+        City = "Mexico City",
+        Iata = "MEX"
+      },
+      DestinationNavigation = new Airport
+      {
+        AirportId = 2,
+        City = "Ulaanbaataar",
+        Iata = "UBN"
+      }
     };
 
     Flight flight2 = new()
     {
       FlightNumber = 10,
       Origin = 3,
-      Destination = 4
+      Destination = 4,
+      OriginNavigation = new Airport
+      {
+        AirportId = 3,
+        City = "Mexico City",
+        Iata = "MEX"
+      },
+      DestinationNavigation = new Airport
+      {
+        AirportId = 4,
+        City = "Ulaanbaataar",
+        Iata = "UBN"
+      }
     };
 
     _context.Flights.Add(flight);

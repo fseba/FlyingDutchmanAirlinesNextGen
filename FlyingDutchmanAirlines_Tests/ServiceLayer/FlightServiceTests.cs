@@ -11,19 +11,29 @@ namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
 public class FlightServiceTests
 {
   private Mock<FlightRepository> _mockFlightRepository = null!;
-  private Mock<AirportRepository> _mockAirportRepository = null!;
 
   [TestInitialize]
   public void TestInitialize()
   {
     _mockFlightRepository = new Mock<FlightRepository>();
-    _mockAirportRepository = new Mock<AirportRepository>();
 
     Flight flightInDatabase = new()
     {
       FlightNumber = 148,
       Origin = 31,
-      Destination = 92
+      Destination = 92,
+      OriginNavigation = new Airport
+      {
+        AirportId = 31,
+        City = "Mexico City",
+        Iata = "MEX"
+      },
+      DestinationNavigation = new Airport
+      {
+        AirportId = 92,
+        City = "Ulaanbaataar",
+        Iata = "UBN"
+      }
     };
 
     Flight[] mockReturn = { flightInDatabase };
@@ -35,30 +45,12 @@ public class FlightServiceTests
     _mockFlightRepository
       .Setup(repository => repository.GetFlightByFlightNumber(148))
       .ReturnsAsync(flightInDatabase);
-
-    _mockAirportRepository
-      .Setup(repository => repository.GetAirportById(31))
-      .ReturnsAsync(new Airport
-      {
-        AirportId = 31,
-        City = "Mexico City",
-        Iata = "MEX"
-      });
-
-    _mockAirportRepository
-      .Setup(repository => repository.GetAirportById(92))
-      .ReturnsAsync(new Airport
-      {
-        AirportId = 92,
-        City = "Ulaanbaataar",
-        Iata = "UBN"
-      });
   }
 
   [TestMethod]
   public async Task GetFlights_Success()
   {
-    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
+    FlightService service = new(_mockFlightRepository.Object);
 
     await foreach (FlightView flightView in service.GetFlights())
     {
@@ -78,7 +70,7 @@ public class FlightServiceTests
       .Setup(repository => repository.GetFlights())
       .ReturnsAsync(Array.Empty<Flight>());
 
-    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
+    FlightService service = new(_mockFlightRepository.Object);
 
     List<FlightView> flightViews = new();
     
@@ -93,7 +85,7 @@ public class FlightServiceTests
   [TestMethod]
   public async Task GetFlightByFlightNumber_Success()
   {
-    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
+    FlightService service = new(_mockFlightRepository.Object);
 
     var flightView = await service.GetFlightByFlightNumber(148);
 
@@ -113,7 +105,7 @@ public class FlightServiceTests
       .Setup(repository => repository.GetFlightByFlightNumber(-1))
       .ThrowsAsync(new ArgumentException());
 
-    FlightService service = new(_mockFlightRepository.Object, _mockAirportRepository.Object);
+    FlightService service = new(_mockFlightRepository.Object);
 
     await service.GetFlightByFlightNumber(-1);
   }

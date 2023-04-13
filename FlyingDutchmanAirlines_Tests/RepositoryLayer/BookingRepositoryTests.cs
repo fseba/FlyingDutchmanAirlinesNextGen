@@ -3,6 +3,7 @@
 using FlyingDutchmanAirlines.DatabaseLayer;
 using FlyingDutchmanAirlines.RepositoryLayer;
 using FlyingDutchmanAirlines_Tests.Stubs;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 
@@ -19,6 +20,28 @@ public class BookingRepositoryTests
       new DbContextOptionsBuilder<FlyingDutchmanAirlinesContext>()
       .UseInMemoryDatabase("FlyingDutchman").Options;
     _context = new FlyingDutchmanAirlinesContext_Stub(dbContextOptions);
+
+    Flight flight = new()
+    {
+      FlightNumber = 0,
+      Origin = 1,
+      Destination = 2,
+      OriginNavigation = new Airport
+      {
+        AirportId = 1,
+        City = "Mexico City",
+        Iata = "MEX"
+      },
+      DestinationNavigation = new Airport
+      {
+        AirportId = 2,
+        City = "Ulaanbaataar",
+        Iata = "UBN"
+      }
+    };
+
+    _context.Flights.Add(flight);
+    _context.SaveChangesAsync();
 
     _repository = new BookingRepository(_context);
     Assert.IsNotNull(_repository);
@@ -83,7 +106,7 @@ public class BookingRepositoryTests
   }
 
   [TestMethod]
-  public async Task GetBookingById_Failure_BookingNotFoundException_NoBookingsInDatabase()
+  public async Task GetBookingById_Failure_NoBookingsInDatabase()
   {
     var booking = await _repository.GetBookingById(1);
 
@@ -91,7 +114,7 @@ public class BookingRepositoryTests
   }
 
   [TestMethod]
-  public async Task GetBookingById_Failure_BookingNotFoundException_Wrong_Id()
+  public async Task GetBookingById_Failure_Wrong_Id()
   {
     await _repository.CreateBooking(1, 0);
 
