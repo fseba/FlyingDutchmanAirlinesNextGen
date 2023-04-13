@@ -10,12 +10,10 @@ namespace FlyingDutchmanAirlines.ServiceLayer;
 public class FlightService
 {
   private readonly FlightRepository _flightRepository = null!;
-  private readonly AirportRepository _airportRepository = null!;
 
-  public FlightService(FlightRepository flightRepository, AirportRepository airportRepository)
+  public FlightService(FlightRepository flightRepository)
   {
     _flightRepository = flightRepository;
-    _airportRepository = airportRepository;
   }
 
   [MethodImpl(MethodImplOptions.NoInlining)]
@@ -33,12 +31,9 @@ public class FlightService
 
     foreach (Flight flight in flights)
     {
-      var originAirport = await _airportRepository.GetAirportById(flight.Origin);
-      var destinationAirport = await _airportRepository.GetAirportById(flight.Destination);
-
       yield return new FlightView(flight.FlightNumber,
-                                 (originAirport!.City, originAirport.Iata),
-                                 (destinationAirport!.City, destinationAirport.Iata));
+                                 (flight.OriginNavigation.City, flight.OriginNavigation.Iata),
+                                 (flight.DestinationNavigation.City, flight.DestinationNavigation.Iata));
     }
   }
 
@@ -51,12 +46,9 @@ public class FlightService
       return null;
     }
 
-    var originAirport = await _airportRepository.GetAirportById(flight.Origin);
-    var destinationAirport = await _airportRepository.GetAirportById(flight.Destination);
-
     return new FlightView(flight.FlightNumber,
-                         (originAirport!.City, originAirport.Iata),
-                         (destinationAirport!.City, destinationAirport.Iata));
+                         (flight.OriginNavigation.City, flight.OriginNavigation.Iata),
+                         (flight.DestinationNavigation.City, flight.DestinationNavigation.Iata)); ;
   }
 }
 
