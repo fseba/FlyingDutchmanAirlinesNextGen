@@ -12,14 +12,12 @@ public class BookingService
   private readonly BookingRepository _bookingRepository = null!;
   private readonly CustomerRepository _customerRepository = null!;
   private readonly FlightRepository _flightRepository = null!;
-  private readonly AirportRepository _airportRepository = null!;
 
-  public BookingService(CustomerRepository customerRepository, BookingRepository bookingRepository, FlightRepository flightRepository, AirportRepository airportRepository)
+  public BookingService(CustomerRepository customerRepository, BookingRepository bookingRepository, FlightRepository flightRepository)
   {
     _customerRepository = customerRepository;
     _bookingRepository = bookingRepository;
     _flightRepository = flightRepository;
-    _airportRepository = airportRepository;
   }
 
   [MethodImpl(MethodImplOptions.NoInlining)]
