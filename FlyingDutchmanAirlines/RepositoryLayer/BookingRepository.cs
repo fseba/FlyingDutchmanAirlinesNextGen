@@ -44,6 +44,8 @@ public class BookingRepository
     }
 
     return await _context.Bookings.Include(b => b.Customer)
+                                  .Include(b => b.FlightNumberNavigation.DestinationNavigation)
+                                  .Include(b => b.FlightNumberNavigation.OriginNavigation)
                                   .FirstOrDefaultAsync(b => b.BookingId == bookingId);
   }
 
