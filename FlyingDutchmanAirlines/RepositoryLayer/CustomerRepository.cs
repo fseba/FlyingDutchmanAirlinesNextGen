@@ -7,7 +7,7 @@ using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
-public class CustomerRepository
+public class CustomerRepository : ICustomerRepository
 {
   private readonly FlyingDutchmanAirlinesContext _context = null!;
 
@@ -37,7 +37,7 @@ public class CustomerRepository
       _context.Customers.Add(customer);
       var result = await _context.SaveChangesAsync();
 
-      return result > 0; 
+      return result > 0;
     }
     catch (DbUpdateException ex)
     {

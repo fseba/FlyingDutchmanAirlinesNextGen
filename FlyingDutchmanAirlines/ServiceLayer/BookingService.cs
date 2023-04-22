@@ -7,13 +7,13 @@ using FlyingDutchmanAirlines.Views;
 
 namespace FlyingDutchmanAirlines.ServiceLayer;
 
-public class BookingService
+public class BookingService : IBookingService
 {
-  private readonly BookingRepository _bookingRepository = null!;
-  private readonly CustomerRepository _customerRepository = null!;
-  private readonly FlightRepository _flightRepository = null!;
+  private readonly IBookingRepository _bookingRepository = null!;
+  private readonly ICustomerRepository _customerRepository = null!;
+  private readonly IFlightRepository _flightRepository = null!;
 
-  public BookingService(CustomerRepository customerRepository, BookingRepository bookingRepository, FlightRepository flightRepository)
+  public BookingService(ICustomerRepository customerRepository, IBookingRepository bookingRepository, IFlightRepository flightRepository)
   {
     _customerRepository = customerRepository;
     _bookingRepository = bookingRepository;

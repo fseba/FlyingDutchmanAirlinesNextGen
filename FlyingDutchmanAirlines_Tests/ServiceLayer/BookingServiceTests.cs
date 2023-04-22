@@ -9,9 +9,9 @@ namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
 [TestClass]
 public class BookingServiceTests
 {
-  private Mock<BookingRepository> _mockBookingRepository = null!;
-  private Mock<CustomerRepository> _mockCustomerRepository = null!;
-  private Mock<FlightRepository> _mockFlightRepository = null!;
+  private Mock<IBookingRepository> _mockBookingRepository = null!;
+  private Mock<ICustomerRepository> _mockCustomerRepository = null!;
+  private Mock<IFlightRepository> _mockFlightRepository = null!;
 
   [TestInitialize]
   public void TestInitialize()

@@ -8,7 +8,7 @@ using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
-public class BookingRepository
+public class BookingRepository : IBookingRepository
 {
   private readonly FlyingDutchmanAirlinesContext _context = null!;
 
@@ -28,7 +28,7 @@ public class BookingRepository
 
   public virtual async Task<bool> CreateBooking(int customerId, int flightNumber)
   {
-    var newBooking = Booking.Create(customerId, flightNumber); 
+    var newBooking = Booking.Create(customerId, flightNumber);
 
     _context.Bookings.Add(newBooking);
     var result = await _context.SaveChangesAsync();
@@ -60,7 +60,7 @@ public class BookingRepository
 
     if (booking is null)
     {
-      return false; 
+      return false;
     }
 
     _context.Bookings.Remove(booking);

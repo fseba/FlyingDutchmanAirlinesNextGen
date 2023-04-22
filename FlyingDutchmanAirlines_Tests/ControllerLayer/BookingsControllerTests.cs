@@ -11,16 +11,22 @@ namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 [TestClass]
 public class BookingsControllerTests
 {
+  private Mock<IBookingService> _mockService = null!;
+
+  [TestInitialize]
+  public void TestInitialize()
+  {
+    _mockService = new();
+  }
+
   [TestMethod]
   public async Task CreateBooking_Success()
   {
-    Mock<BookingService> mockService = new();
-
-    mockService
+    _mockService
       .Setup(service => service.CreateBooking("Bob Bobson", 1))
       .ReturnsAsync(true);
 
-    BookingsController controller = new(mockService.Object);
+    BookingsController controller = new(_mockService.Object);
 
     BookingData bookingData = new() { FirstName = "Bob", LastName = "Bobson" };
 
@@ -34,13 +40,11 @@ public class BookingsControllerTests
   [TestMethod]
   public async Task CreateBooking_Failure_InternalServerError()
   {
-    Mock<BookingService> mockService = new();
-
-    mockService
+    _mockService
       .Setup(service => service.CreateBooking("Bob Bobson", 1))
       .ReturnsAsync(false);
 
-    BookingsController controller = new(mockService.Object);
+    BookingsController controller = new(_mockService.Object);
 
     BookingData bookingData = new() { FirstName = "Bob", LastName = "Bobson" };
 
@@ -54,13 +58,11 @@ public class BookingsControllerTests
   [TestMethod]
   public async Task DeleteBooking_Success()
   {
-    Mock<BookingService> mockService = new();
-
-    mockService
+    _mockService
       .Setup(service => service.DeleteBooking(1))
       .ReturnsAsync(true);
 
-    BookingsController controller = new(mockService.Object);
+    BookingsController controller = new(_mockService.Object);
 
     ObjectResult? response = await controller.DeleteBooking(1) as ObjectResult;
 

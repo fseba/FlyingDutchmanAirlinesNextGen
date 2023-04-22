@@ -10,12 +10,12 @@ namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
 [TestClass]
 public class FlightServiceTests
 {
-  private Mock<FlightRepository> _mockFlightRepository = null!;
+  private Mock<IFlightRepository> _mockFlightRepository = null!;
 
   [TestInitialize]
   public void TestInitialize()
   {
-    _mockFlightRepository = new Mock<FlightRepository>();
+    _mockFlightRepository = new();
 
     Flight flightInDatabase = new()
     {

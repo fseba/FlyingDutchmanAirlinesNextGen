@@ -7,11 +7,11 @@ using FlyingDutchmanAirlines.Views;
 
 namespace FlyingDutchmanAirlines.ServiceLayer;
 
-public class FlightService
+public class FlightService : IFlightService
 {
-  private readonly FlightRepository _flightRepository = null!;
+  private readonly IFlightRepository _flightRepository = null!;
 
-  public FlightService(FlightRepository flightRepository)
+  public FlightService(IFlightRepository flightRepository)
   {
     _flightRepository = flightRepository;
   }

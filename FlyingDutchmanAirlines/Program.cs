@@ -12,16 +12,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionStringLocal = builder.Configuration.GetConnectionString("FlyingDutchmanDatabase_local");
-
 builder.Services
-  .AddDbContext<FlyingDutchmanAirlinesContext>(options => options.UseSqlServer(connectionStringLocal))
-  .AddTransient<FlightService, FlightService>()
-  .AddTransient<BookingService, BookingService>()
-  .AddTransient<FlightRepository, FlightRepository>()
-  .AddTransient<BookingRepository, BookingRepository>()
-  .AddTransient<CustomerRepository, CustomerRepository>()
-  .AddTransient<AirportRepository, AirportRepository>();
+  .AddDbContext<IFlyingDutchmanAirlinesContext, FlyingDutchmanAirlinesContext>()
+  .AddTransient<IFlightService, FlightService>()
+  .AddTransient<IBookingService, BookingService>()
+  .AddTransient<IFlightRepository, FlightRepository>()
+  .AddTransient<IBookingRepository, BookingRepository>()
+  .AddTransient<ICustomerRepository, CustomerRepository>()
+  .AddTransient<IAirportRepository, AirportRepository>();
 
 var app = builder.Build();
 

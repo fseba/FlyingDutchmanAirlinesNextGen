@@ -13,7 +13,7 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 public class FlightRepositoryTests
 {
   private FlyingDutchmanAirlinesContext _context = null!;
-  private FlightRepository _repository = null!;
+  private IFlightRepository _repository = null!;
 
   [TestInitialize]
   public async Task TestInitialize()

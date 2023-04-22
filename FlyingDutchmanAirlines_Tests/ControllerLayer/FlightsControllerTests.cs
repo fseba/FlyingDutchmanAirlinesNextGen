@@ -11,22 +11,28 @@ namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 [TestClass]
 public class FlightsControllerTests
 {
-  [TestMethod]
+  private Mock<IFlightService> _mockService = null!;
+
+  [TestInitialize]
+  public void TestInitialize()
+  {
+    _mockService = new();
+  }
+
+    [TestMethod]
   public async Task GetFlights_Success_200()
   {
-    Mock<FlightService> mockService = new();
-
     List<FlightView> returnFlightViews = new(2)
     {
       new FlightView(1932, ("Groningen", "GRQ"), ("Phoenix", "PHX")),
       new FlightView(841, ("New York City", "JFK"), ("London", "LHR"))
     };
 
-    mockService
+    _mockService
       .Setup(s => s.GetFlights())
       .Returns(FlightViewAsyncGenerator(returnFlightViews));
 
-    FlightsController controller = new(mockService.Object);
+    FlightsController controller = new(_mockService.Object);
 
     ObjectResult? response = await controller.GetFlights() as ObjectResult;
 
@@ -52,15 +58,13 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlight_Failure_Empty_Result_404()
   {
-    Mock<FlightService> mockService = new();
-
     var emptyFlightViews = Enumerable.Empty<FlightView>();
 
-    mockService
+    _mockService
       .Setup(s => s.GetFlights())
       .Returns(FlightViewAsyncGenerator(emptyFlightViews));
 
-    FlightsController controller = new(mockService.Object);
+    FlightsController controller = new(_mockService.Object);
 
     StatusCodeResult? response = await controller.GetFlights() as StatusCodeResult;
 
@@ -71,13 +75,11 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlight_Failure_ArugumentException_500()
   {
-    Mock<FlightService> mockService = new();
-
-    mockService
+    _mockService
       .Setup(s => s.GetFlights())
       .Throws(new ArgumentException());
 
-    FlightsController controller = new(mockService.Object);
+    FlightsController controller = new(_mockService.Object);
 
     ObjectResult? response = await controller.GetFlights() as ObjectResult;
 
@@ -88,15 +90,13 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlightByFlightNumber_Success_200()
   {
-    Mock<FlightService> mockService = new();
-
     FlightView returnedFlightView = new(0, ("Lagos", "LOS"), ("Marrakesh", "RAK"));
 
-    mockService
+    _mockService
       .Setup(s => s.GetFlightByFlightNumber(0))
       .ReturnsAsync(returnedFlightView);
 
-    FlightsController controller = new(mockService.Object);
+    FlightsController controller = new(_mockService.Object);
 
     ObjectResult? response = await controller.GetFlightByFlightNumber(0) as ObjectResult;
     Assert.IsNotNull(response);
@@ -111,13 +111,11 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlightByFlightNumber_Failure_Empty_Result_404()
   {
-    Mock<FlightService> mockService = new();
-
-    mockService
+    _mockService
       .Setup(s => s.GetFlightByFlightNumber(0))
       .Returns(Task.FromResult<FlightView?>(null));
 
-    FlightsController controller = new(mockService.Object);
+    FlightsController controller = new(_mockService.Object);
 
     StatusCodeResult? response = await controller.GetFlightByFlightNumber(0) as StatusCodeResult;
 
@@ -128,9 +126,7 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlightByFlightNumber_Failure_ArugumentException_400()
   {
-    Mock<FlightService> mockService = new();
-
-    FlightsController controller = new(mockService.Object);
+    FlightsController controller = new(_mockService.Object);
 
     ObjectResult? response = await controller.GetFlightByFlightNumber(-1) as ObjectResult;
 

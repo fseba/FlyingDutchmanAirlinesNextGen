@@ -11,7 +11,7 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 public class BookingRepositoryTests
 {
   private FlyingDutchmanAirlinesContext _context = null!;
-  private BookingRepository _repository = null!;
+  private IBookingRepository _repository = null!;
 
   [TestInitialize]
   public void TestInitialize()

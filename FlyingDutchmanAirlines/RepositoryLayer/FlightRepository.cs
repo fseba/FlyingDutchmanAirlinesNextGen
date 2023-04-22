@@ -7,7 +7,7 @@ using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines.RepositoryLayer;
 
-public class FlightRepository
+public class FlightRepository : IFlightRepository
 {
   private readonly FlyingDutchmanAirlinesContext _context = null!;
 

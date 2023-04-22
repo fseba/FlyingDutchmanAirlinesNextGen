@@ -12,7 +12,7 @@ namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 public class CustomerRepositoryTests
 {
   private FlyingDutchmanAirlinesContext _context = null!;
-  private CustomerRepository _repository = null!;
+  private ICustomerRepository _repository = null!;
   private DbContextOptions<FlyingDutchmanAirlinesContext> _dbContextOptions = null!;
 
   [TestInitialize]
