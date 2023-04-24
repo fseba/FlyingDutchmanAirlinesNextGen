@@ -18,8 +18,7 @@ builder.Services
   .AddTransient<IBookingService, BookingService>()
   .AddTransient<IFlightRepository, FlightRepository>()
   .AddTransient<IBookingRepository, BookingRepository>()
-  .AddTransient<ICustomerRepository, CustomerRepository>()
-  .AddTransient<IAirportRepository, AirportRepository>();
+  .AddTransient<ICustomerRepository, CustomerRepository>();
 
 var app = builder.Build();
 
