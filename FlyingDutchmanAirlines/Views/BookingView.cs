@@ -1,4 +1,6 @@
-﻿namespace FlyingDutchmanAirlines.Views;
+﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+
+namespace FlyingDutchmanAirlines.Views;
 
 public class BookingView
 {
@@ -7,11 +9,16 @@ public class BookingView
   public string CustomerName { get; private set; }
   public FlightView FlightView { get; private set; }
 
-  public BookingView(int bookingId, int customerId, string customerName, FlightView flightView)
+  public BookingView(Booking booking, FlightView flightView)
   {
-    BookingId = bookingId;
-    CustomerId = customerId;
-    CustomerName = customerName;
+    if (booking is null || flightView is null)
+    {
+      throw new ArgumentNullException();
+    }
+
+    BookingId = booking.BookingId;
+    CustomerId = booking.CustomerId!.Value;
+    CustomerName = booking.Customer!.Name;
     FlightView = flightView;
   }
 }

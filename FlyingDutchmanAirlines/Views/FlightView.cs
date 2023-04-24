@@ -1,4 +1,6 @@
-﻿namespace FlyingDutchmanAirlines.Views;
+﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+
+namespace FlyingDutchmanAirlines.Views;
 
 public class FlightView
 {
@@ -6,11 +8,16 @@ public class FlightView
   public AirportInfo Origin { get; private set; }
   public AirportInfo Destination { get; private set; }
 
-  public FlightView(int flightNumber, (string city, string code) origin, (string city, string code) destination)
+  public FlightView(Flight flight)
   {
-    FlightNumber = flightNumber;
-    Origin = new AirportInfo(origin);
-    Destination = new AirportInfo(destination);
+    if (flight is null)
+    {
+      throw new ArgumentNullException(nameof(flight));
+    }
+
+    FlightNumber = flight.FlightNumber;
+    Origin = new AirportInfo((flight.OriginNavigation.City, flight.OriginNavigation.Iata));
+    Destination = new AirportInfo((flight.DestinationNavigation.City, flight.DestinationNavigation.Iata));
   }
 }
 
