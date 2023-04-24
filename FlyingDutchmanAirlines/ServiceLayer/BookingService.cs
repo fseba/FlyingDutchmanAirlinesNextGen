@@ -49,7 +49,10 @@ public class BookingService : IBookingService
 
       bool customerSuccessfullyAdded = await _customerRepository.AddCustomer(customer);
 
-      if (!customerSuccessfullyAdded) return false;
+      if (!customerSuccessfullyAdded)
+      {
+        return false;
+      }
     }
 
     return await _bookingRepository.CreateBooking(customer.CustomerId, flightNumber);
@@ -79,11 +82,9 @@ public class BookingService : IBookingService
       return null;
     }
 
-    FlightView flightView = new(booking.FlightNumber,
-                               (booking.FlightNumberNavigation.OriginNavigation.City, booking.FlightNumberNavigation.OriginNavigation.Iata),
-                               (booking.FlightNumberNavigation.DestinationNavigation.City, booking.FlightNumberNavigation.DestinationNavigation.Iata));
+    FlightView flightView = new(booking.FlightNumberNavigation);
 
-    return new BookingView(bookingId, booking.Customer!.CustomerId, booking.Customer.Name, flightView);
+    return new BookingView(booking, flightView);
   }
 
   public virtual async IAsyncEnumerable<BookingView?> GetBookingsByCustomerName(string customerName)

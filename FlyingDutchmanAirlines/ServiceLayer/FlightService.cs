@@ -31,9 +31,7 @@ public class FlightService : IFlightService
 
     foreach (Flight flight in flights)
     {
-      yield return new FlightView(flight.FlightNumber,
-                                 (flight.OriginNavigation.City, flight.OriginNavigation.Iata),
-                                 (flight.DestinationNavigation.City, flight.DestinationNavigation.Iata));
+      yield return new FlightView(flight);
     }
   }
 
@@ -46,9 +44,7 @@ public class FlightService : IFlightService
       return null;
     }
 
-    return new FlightView(flight.FlightNumber,
-                         (flight.OriginNavigation.City, flight.OriginNavigation.Iata),
-                         (flight.DestinationNavigation.City, flight.DestinationNavigation.Iata)); ;
+    return new FlightView(flight); ;
   }
 }
 

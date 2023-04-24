@@ -5,6 +5,7 @@ using Moq;
 using FlyingDutchmanAirlines.ControllerLayer;
 using FlyingDutchmanAirlines.ServiceLayer;
 using FlyingDutchmanAirlines.Views;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 
@@ -24,8 +25,38 @@ public class FlightsControllerTests
   {
     List<FlightView> returnFlightViews = new(2)
     {
-      new FlightView(1932, ("Groningen", "GRQ"), ("Phoenix", "PHX")),
-      new FlightView(841, ("New York City", "JFK"), ("London", "LHR"))
+      new FlightView(new Flight()
+      {
+        FlightNumber = 1932,
+        OriginNavigation = new Airport
+          {
+            AirportId = 31,
+            City = "Groningen",
+            Iata = "GRQ"
+          },
+        DestinationNavigation = new Airport
+          {
+            AirportId = 92,
+            City = "Phoenix",
+            Iata = "PHX"
+          }
+      }),
+      new FlightView(new Flight()
+      {
+        FlightNumber = 841,
+        OriginNavigation = new Airport
+        {
+          AirportId = 31,
+          City = "New York City",
+          Iata = "JFK"
+        },
+        DestinationNavigation = new Airport
+        {
+          AirportId = 92,
+          City = "London",
+          Iata = "LHR"
+        }
+      })
     };
 
     _mockService
@@ -90,7 +121,22 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlightByFlightNumber_Success_200()
   {
-    FlightView returnedFlightView = new(0, ("Lagos", "LOS"), ("Marrakesh", "RAK"));
+    FlightView returnedFlightView = new(new Flight()
+    {
+      FlightNumber = 0,
+      OriginNavigation = new Airport
+      {
+        AirportId = 31,
+        City = "Lagos",
+        Iata = "LOS"
+      },
+      DestinationNavigation = new Airport
+      {
+        AirportId = 92,
+        City = "Marrakesh",
+        Iata = "RAK"
+      }
+    });
 
     _mockService
       .Setup(s => s.GetFlightByFlightNumber(0))

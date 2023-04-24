@@ -1,4 +1,5 @@
 ﻿using System;
+using FlyingDutchmanAirlines.DatabaseLayer.Models;
 using FlyingDutchmanAirlines.Views;
 
 namespace FlyingDutchmanAirlines_Tests.Views;
@@ -9,20 +10,34 @@ public class FlightViewTests
   [TestMethod]
   public void Constructor_FlightView_Success()
   {
-    int flightNumber = 0;
-    string originCity = "Amsterdam";
-    string originCityCode = "AMS";
-    string destinationCity = "Moscow";
-    string destinationCityCode = "SVO";
+    Flight flight = new()
+    {
+      FlightNumber = 0,
+      Origin = 31,
+      Destination = 92,
+      OriginNavigation = new Airport
+      {
+        AirportId = 31,
+        City = "Amsterdam",
+        Iata = "AMS"
+      },
+      DestinationNavigation = new Airport
+      {
+        AirportId = 92,
+        City = "Moscow",
+        Iata = "SVO"
+      }
+    };
 
-    FlightView view = new(flightNumber, (originCity, originCityCode), (destinationCity, destinationCityCode));
+
+    FlightView view = new(flight);
     Assert.IsNotNull(view);
 
-    Assert.AreEqual(view.FlightNumber, flightNumber);
-    Assert.AreEqual(view.Origin.City, originCity);
-    Assert.AreEqual(view.Origin.Code, originCityCode);
-    Assert.AreEqual(view.Destination.City, destinationCity);
-    Assert.AreEqual(view.Destination.Code, destinationCityCode);
+    Assert.AreEqual(view.FlightNumber, flight.FlightNumber);
+    Assert.AreEqual(view.Origin.City, flight.OriginNavigation.City);
+    Assert.AreEqual(view.Origin.Code, flight.OriginNavigation.Iata);
+    Assert.AreEqual(view.Destination.City, flight.DestinationNavigation.City);
+    Assert.AreEqual(view.Destination.Code, flight.DestinationNavigation.Iata);
   }
 
   [TestMethod]
