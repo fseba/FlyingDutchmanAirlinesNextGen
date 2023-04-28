@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using FlyingDutchmanAirlines.ApplicationLayer.JsonData;
 using Microsoft.AspNetCore.Http;
 
-namespace FlyingDutchmanAirlines_Tests.ControllerLayer.JsonData;
+namespace FlyingDutchmanAirlines_Tests.ApplicationLayer.JsonData;
 
 [TestClass]
 public class BookingDataTests

@@ -6,7 +6,7 @@ using FlyingDutchmanAirlines.ApplicationLayer;
 using FlyingDutchmanAirlines.ApplicationLayer.JsonData;
 using FlyingDutchmanAirlines.BusinessLogicLayer;
 
-namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
+namespace FlyingDutchmanAirlines_Tests.ApplicationLayer;
 
 [TestClass]
 public class BookingsControllerTests

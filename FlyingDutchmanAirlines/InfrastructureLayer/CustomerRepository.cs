@@ -2,10 +2,9 @@
 using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
 
-using FlyingDutchmanAirlines.DatabaseLayer;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
-namespace FlyingDutchmanAirlines.RepositoryLayer;
+namespace FlyingDutchmanAirlines.InfrastuctureLayer;
 
 public class CustomerRepository : ICustomerRepository
 {

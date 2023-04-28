@@ -7,7 +7,7 @@ using FlyingDutchmanAirlines.BusinessLogicLayer;
 using FlyingDutchmanAirlines.DTOs;
 using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
-namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
+namespace FlyingDutchmanAirlines_Tests.ApplicationLayer;
 
 [TestClass]
 public class FlightsControllerTests
@@ -23,9 +23,9 @@ public class FlightsControllerTests
     [TestMethod]
   public async Task GetFlights_Success_200()
   {
-    List<FlightView> returnFlightViews = new(2)
+    List<FlightDTO> returnFlightViews = new(2)
     {
-      new FlightView(new Flight()
+      new FlightDTO(new Flight()
       {
         FlightNumber = 1932,
         OriginNavigation = new Airport
@@ -41,7 +41,7 @@ public class FlightsControllerTests
             Iata = "PHX"
           }
       }),
-      new FlightView(new Flight()
+      new FlightDTO(new Flight()
       {
         FlightNumber = 841,
         OriginNavigation = new Airport
@@ -70,17 +70,17 @@ public class FlightsControllerTests
     Assert.IsNotNull(response);
     Assert.AreEqual((int)HttpStatusCode.OK, response.StatusCode);
 
-    Queue<FlightView>? content = response.Value as Queue<FlightView>;
+    Queue<FlightDTO>? content = response.Value as Queue<FlightDTO>;
     Assert.IsNotNull(content);
 
     Assert.IsTrue(returnFlightViews.All(flight => content.Contains(flight)));
   }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-  private async IAsyncEnumerable<FlightView> FlightViewAsyncGenerator(IEnumerable<FlightView> views)
+  private async IAsyncEnumerable<FlightDTO> FlightViewAsyncGenerator(IEnumerable<FlightDTO> views)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
   {
-    foreach (FlightView flightView in views)
+    foreach (FlightDTO flightView in views)
     {
       yield return flightView;
     }
@@ -89,7 +89,7 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlight_Failure_Empty_Result_404()
   {
-    var emptyFlightViews = Enumerable.Empty<FlightView>();
+    var emptyFlightViews = Enumerable.Empty<FlightDTO>();
 
     _mockService
       .Setup(s => s.GetFlights())
@@ -121,7 +121,7 @@ public class FlightsControllerTests
   [TestMethod]
   public async Task GetFlightByFlightNumber_Success_200()
   {
-    FlightView returnedFlightView = new(new Flight()
+    FlightDTO returnedFlightView = new(new Flight()
     {
       FlightNumber = 0,
       OriginNavigation = new Airport
@@ -148,7 +148,7 @@ public class FlightsControllerTests
     Assert.IsNotNull(response);
     Assert.AreEqual((int)HttpStatusCode.OK, response.StatusCode);
 
-    FlightView? content = response.Value as FlightView;
+    FlightDTO? content = response.Value as FlightDTO;
     Assert.IsNotNull(content);
 
     Assert.AreEqual(returnedFlightView, content);
@@ -159,7 +159,7 @@ public class FlightsControllerTests
   {
     _mockService
       .Setup(s => s.GetFlightByFlightNumber(0))
-      .Returns(Task.FromResult<FlightView?>(null));
+      .Returns(Task.FromResult<FlightDTO?>(null));
 
     FlightsController controller = new(_mockService.Object);
 

@@ -1,6 +1,6 @@
 ﻿using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
-namespace FlyingDutchmanAirlines_Tests.Models;
+namespace FlyingDutchmanAirlines_Tests.InfrastuctureLayer.Models;
 
 [TestClass]
 public class CustomerModelTests

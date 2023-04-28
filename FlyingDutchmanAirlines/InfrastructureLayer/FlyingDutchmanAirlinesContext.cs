@@ -1,8 +1,8 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace FlyingDutchmanAirlines.DatabaseLayer;
+namespace FlyingDutchmanAirlines.InfrastuctureLayer;
 
 public class FlyingDutchmanAirlinesContext : DbContext, IFlyingDutchmanAirlinesContext
 {

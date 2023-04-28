@@ -4,7 +4,7 @@ using FlyingDutchmanAirlines.InfrastuctureLayer;
 using FlyingDutchmanAirlines.BusinessLogicLayer;
 using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
-namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
+namespace FlyingDutchmanAirlines_Tests.BusinessLogicLayer;
 
 [TestClass]
 public class BookingServiceTests

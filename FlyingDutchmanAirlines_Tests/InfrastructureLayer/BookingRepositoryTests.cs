@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using FlyingDutchmanAirlines.InfrastuctureLayer;
-using FlyingDutchmanAirlines.InfrastuctureLayer;
 using FlyingDutchmanAirlines_Tests.Stubs;
 using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
-namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
+namespace FlyingDutchmanAirlines_Tests.InfrastructureLayer;
 
 [TestClass]
 public class BookingRepositoryTests

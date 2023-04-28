@@ -1,4 +1,4 @@
-﻿namespace FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿namespace FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
 public sealed class Airport
 {

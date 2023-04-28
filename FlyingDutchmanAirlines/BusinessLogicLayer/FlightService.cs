@@ -5,7 +5,7 @@ using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 using FlyingDutchmanAirlines.InfrastuctureLayer;
 using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines.ServiceLayer;
+namespace FlyingDutchmanAirlines.BusinessLogicLayer;
 
 public class FlightService : IFlightService
 {
@@ -25,17 +25,17 @@ public class FlightService : IFlightService
     }
   }
 
-  public virtual async IAsyncEnumerable<FlightView> GetFlights()
+  public virtual async IAsyncEnumerable<FlightDTO> GetFlights()
   {
     IEnumerable<Flight> flights = await _flightRepository.GetFlights();
 
     foreach (Flight flight in flights)
     {
-      yield return new FlightView(flight);
+      yield return new FlightDTO(flight);
     }
   }
 
-  public virtual async Task<FlightView?> GetFlightByFlightNumber(int flightNumber)
+  public virtual async Task<FlightDTO?> GetFlightByFlightNumber(int flightNumber)
   {
     var flight = await _flightRepository.GetFlightByFlightNumber(flightNumber);
 
@@ -44,7 +44,7 @@ public class FlightService : IFlightService
       return null;
     }
 
-    return new FlightView(flight); ;
+    return new FlightDTO(flight); ;
   }
 }
 

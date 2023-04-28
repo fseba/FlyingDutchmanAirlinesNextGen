@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
-using FlyingDutchmanAirlines.ControllerLayer.JsonData;
-using FlyingDutchmanAirlines.ServiceLayer;
-using FlyingDutchmanAirlines.Views;
+using FlyingDutchmanAirlines.ApplicationLayer.JsonData;
+using FlyingDutchmanAirlines.BusinessLogicLayer;
+using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines.ControllerLayer;
+namespace FlyingDutchmanAirlines.ApplicationLayer;
 
 [ApiController]
 [Route("[controller]")]
@@ -51,7 +51,7 @@ public class BookingsController : ControllerBase
   }
 
   [HttpPost]
-  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingView))]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingDTO))]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -61,8 +61,8 @@ public class BookingsController : ControllerBase
     {
       var customerName = $"{body.FirstName} {body.LastName}";
 
-      Queue<BookingView?> bookings = new();
-      await foreach (BookingView? booking in _bookingService.GetBookingsByCustomerName(customerName))
+      Queue<BookingDTO?> bookings = new();
+      await foreach (BookingDTO? booking in _bookingService.GetBookingsByCustomerName(customerName))
       {
         bookings.Enqueue(booking);
       }
@@ -78,7 +78,7 @@ public class BookingsController : ControllerBase
   }
 
   [HttpGet("{bookingId:int}")]
-  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingView))]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BookingDTO))]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public async Task<IActionResult> GetBookingById(int bookingId)

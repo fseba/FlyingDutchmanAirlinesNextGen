@@ -25,20 +25,14 @@
 
   <ItemGroup>
     <None Remove="Stubs\" />
-    <None Remove="RepositoryLayer\" />
-    <None Remove="ServiceLayer\" />
     <None Remove="Views\" />
-    <None Remove="ControllerLayer\" />
     <None Remove="ControllerLayer\JsonData\" />
-    <None Remove="Models\" />
+    <None Remove="InfrastructureLayer\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Stubs\" />
-    <Folder Include="RepositoryLayer\" />
-    <Folder Include="ServiceLayer\" />
     <Folder Include="Views\" />
-    <Folder Include="ControllerLayer\" />
-    <Folder Include="ControllerLayer\JsonData\" />
-    <Folder Include="Models\" />
+    <Folder Include="ApplicationLayer\JsonData\" />
+    <Folder Include="InfrastructureLayer\Models\" />
   </ItemGroup>
 </Project>

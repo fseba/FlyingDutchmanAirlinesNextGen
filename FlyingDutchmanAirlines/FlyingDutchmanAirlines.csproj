@@ -19,15 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="RepositoryLayer\" />
     <None Remove="ServiceLayer\" />
-    <None Remove="Views\" />
     <None Remove="ControllerLayer\JsonData\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="RepositoryLayer\" />
-    <Folder Include="ServiceLayer\" />
-    <Folder Include="Views\" />
-    <Folder Include="ControllerLayer\JsonData\" />
+    <Folder Include="BusinessLogicLayer\" />
+    <Folder Include="ApplicationLayer\JsonData\" />
   </ItemGroup>
 </Project>

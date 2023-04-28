@@ -2,14 +2,14 @@
 
 namespace FlyingDutchmanAirlines.DTOs;
 
-public class BookingView
+public class BookingDTO
 {
   public int BookingId { get; private set; }
   public int CustomerId { get; private set; }
   public string CustomerName { get; private set; }
-  public FlightView FlightView { get; private set; }
+  public FlightDTO FlightView { get; private set; }
 
-  public BookingView(Booking booking, FlightView flightView)
+  public BookingDTO(Booking booking, FlightDTO flightView)
   {
     if (booking is null || flightView is null)
     {

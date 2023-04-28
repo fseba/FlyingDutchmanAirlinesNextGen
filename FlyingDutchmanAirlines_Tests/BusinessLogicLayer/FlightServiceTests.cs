@@ -5,7 +5,7 @@ using FlyingDutchmanAirlines.InfrastuctureLayer;
 using FlyingDutchmanAirlines.BusinessLogicLayer;
 using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
+namespace FlyingDutchmanAirlines_Tests.BusinessLogicLayer;
 
 [TestClass]
 public class FlightServiceTests
@@ -52,7 +52,7 @@ public class FlightServiceTests
   {
     FlightService service = new(_mockFlightRepository.Object);
 
-    await foreach (FlightView flightView in service.GetFlights())
+    await foreach (FlightDTO flightView in service.GetFlights())
     {
       Assert.IsNotNull(flightView);
       Assert.AreEqual(flightView.FlightNumber, 148);
@@ -72,9 +72,9 @@ public class FlightServiceTests
 
     FlightService service = new(_mockFlightRepository.Object);
 
-    List<FlightView> flightViews = new();
+    List<FlightDTO> flightViews = new();
     
-    await foreach (FlightView flightView in service.GetFlights())
+    await foreach (FlightDTO flightView in service.GetFlights())
     {
       flightViews.Add(flightView);
     }

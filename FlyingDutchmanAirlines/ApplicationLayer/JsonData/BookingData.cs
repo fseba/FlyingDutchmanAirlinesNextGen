@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FlyingDutchmanAirlines.ControllerLayer.JsonData;
+namespace FlyingDutchmanAirlines.ApplicationLayer.JsonData;
 
 public class BookingData : IValidatableObject
 {

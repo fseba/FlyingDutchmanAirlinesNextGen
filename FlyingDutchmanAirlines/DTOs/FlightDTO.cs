@@ -2,13 +2,13 @@
 
 namespace FlyingDutchmanAirlines.DTOs;
 
-public class FlightView
+public class FlightDTO
 {
   public int FlightNumber { get; private set; }
   public AirportInfo Origin { get; private set; }
   public AirportInfo Destination { get; private set; }
 
-  public FlightView(Flight flight)
+  public FlightDTO(Flight flight)
   {
     if (flight is null)
     {

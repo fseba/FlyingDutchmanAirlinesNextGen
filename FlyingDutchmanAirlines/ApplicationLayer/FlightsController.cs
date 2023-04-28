@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
-using FlyingDutchmanAirlines.ServiceLayer;
-using FlyingDutchmanAirlines.Views;
+using FlyingDutchmanAirlines.BusinessLogicLayer;
+using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines.ControllerLayer;
+namespace FlyingDutchmanAirlines.ApplicationLayer;
 
 [ApiController]
 [Route("[controller]")]
@@ -19,15 +19,15 @@ public class FlightsController : ControllerBase
   }
 
   [HttpGet]
-  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Queue<FlightView>))]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Queue<FlightDTO>))]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<IActionResult> GetFlights()
   {
     try
     {
-      Queue<FlightView> flights = new();
-      await foreach (FlightView flight in _service.GetFlights())
+      Queue<FlightDTO> flights = new();
+      await foreach (FlightDTO flight in _service.GetFlights())
       {
         flights.Enqueue(flight);
       }
@@ -43,7 +43,7 @@ public class FlightsController : ControllerBase
   }
 
   [HttpGet("{flightNumber}")]
-  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FlightView))]
+  [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FlightDTO))]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]

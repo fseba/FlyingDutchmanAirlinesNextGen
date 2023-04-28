@@ -2,7 +2,7 @@
 using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines_Tests.Views;
+namespace FlyingDutchmanAirlines_Tests.DTOs;
 
 [TestClass]
 public class FlightViewTests
@@ -30,7 +30,7 @@ public class FlightViewTests
     };
 
 
-    FlightView view = new(flight);
+    FlightDTO view = new(flight);
     Assert.IsNotNull(view);
 
     Assert.AreEqual(view.FlightNumber, flight.FlightNumber);

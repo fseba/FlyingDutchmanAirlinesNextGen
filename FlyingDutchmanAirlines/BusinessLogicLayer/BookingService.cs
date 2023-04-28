@@ -5,7 +5,7 @@ using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 using FlyingDutchmanAirlines.InfrastuctureLayer;
 using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines.ServiceLayer;
+namespace FlyingDutchmanAirlines.BusinessLogicLayer;
 
 public class BookingService : IBookingService
 {
@@ -70,7 +70,7 @@ public class BookingService : IBookingService
     return await _bookingRepository.DeleteBooking(bookingId);
   }
 
-  public virtual async Task<BookingView?> GetBookingById(int bookingId)
+  public virtual async Task<BookingDTO?> GetBookingById(int bookingId)
   {
     if (bookingId < 0)
     {
@@ -84,12 +84,12 @@ public class BookingService : IBookingService
       return null;
     }
 
-    FlightView flightView = new(booking.FlightNumberNavigation);
+    FlightDTO flightView = new(booking.FlightNumberNavigation);
 
-    return new BookingView(booking, flightView);
+    return new BookingDTO(booking, flightView);
   }
 
-  public virtual async IAsyncEnumerable<BookingView?> GetBookingsByCustomerName(string customerName)
+  public virtual async IAsyncEnumerable<BookingDTO?> GetBookingsByCustomerName(string customerName)
   {
     var customer = await _customerRepository.GetCustomerByName(customerName);
 

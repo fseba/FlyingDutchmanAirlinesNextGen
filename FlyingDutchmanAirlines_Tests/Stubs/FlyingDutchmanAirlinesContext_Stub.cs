@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 
-using FlyingDutchmanAirlines.DatabaseLayer;
+using FlyingDutchmanAirlines.InfrastuctureLayer;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.Stubs;
 
