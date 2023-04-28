@@ -1,6 +1,6 @@
 ﻿using System;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.Views;
+using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
+using FlyingDutchmanAirlines.DTOs;
 
 namespace FlyingDutchmanAirlines_Tests.Views;
 

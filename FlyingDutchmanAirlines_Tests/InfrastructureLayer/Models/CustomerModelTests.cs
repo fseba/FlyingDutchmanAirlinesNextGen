@@ -1,4 +1,4 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.Models;
 

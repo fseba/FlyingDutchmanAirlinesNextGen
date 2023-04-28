@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using FlyingDutchmanAirlines.ControllerLayer.JsonData;
+using FlyingDutchmanAirlines.ApplicationLayer.JsonData;
 using Microsoft.AspNetCore.Http;
 
 namespace FlyingDutchmanAirlines_Tests.ControllerLayer.JsonData;

@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using FlyingDutchmanAirlines_Tests.Stubs;
-using FlyingDutchmanAirlines.DatabaseLayer;
-using FlyingDutchmanAirlines.RepositoryLayer;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.InfrastuctureLayer;
+using FlyingDutchmanAirlines.InfrastuctureLayer;
+using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.RepositoryLayer;
 

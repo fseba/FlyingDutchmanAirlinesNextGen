@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-using FlyingDutchmanAirlines.ControllerLayer;
-using FlyingDutchmanAirlines.ServiceLayer;
-using FlyingDutchmanAirlines.Views;
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
+using FlyingDutchmanAirlines.ApplicationLayer;
+using FlyingDutchmanAirlines.BusinessLogicLayer;
+using FlyingDutchmanAirlines.DTOs;
+using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
 namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 

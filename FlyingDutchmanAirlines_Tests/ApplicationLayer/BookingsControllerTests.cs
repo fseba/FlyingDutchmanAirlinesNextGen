@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-using FlyingDutchmanAirlines.ControllerLayer;
-using FlyingDutchmanAirlines.ControllerLayer.JsonData;
-using FlyingDutchmanAirlines.ServiceLayer;
+using FlyingDutchmanAirlines.ApplicationLayer;
+using FlyingDutchmanAirlines.ApplicationLayer.JsonData;
+using FlyingDutchmanAirlines.BusinessLogicLayer;
 
 namespace FlyingDutchmanAirlines_Tests.ControllerLayer;
 

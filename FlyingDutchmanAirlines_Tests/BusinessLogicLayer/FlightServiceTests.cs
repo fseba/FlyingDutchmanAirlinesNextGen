@@ -1,9 +1,9 @@
 ﻿using Moq;
 
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.RepositoryLayer;
-using FlyingDutchmanAirlines.ServiceLayer;
-using FlyingDutchmanAirlines.Views;
+using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
+using FlyingDutchmanAirlines.InfrastuctureLayer;
+using FlyingDutchmanAirlines.BusinessLogicLayer;
+using FlyingDutchmanAirlines.DTOs;
 
 namespace FlyingDutchmanAirlines_Tests.ServiceLayer;
 

@@ -1,6 +1,6 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
-namespace FlyingDutchmanAirlines.Views;
+namespace FlyingDutchmanAirlines.DTOs;
 
 public class FlightView
 {

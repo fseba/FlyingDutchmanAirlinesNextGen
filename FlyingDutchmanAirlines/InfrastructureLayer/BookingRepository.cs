@@ -36,6 +36,27 @@ public class BookingRepository : IBookingRepository
     return result > 0;
   }
 
+  public virtual async Task<bool> AddBooking(Booking booking)
+  {
+    if (booking is null)
+    {
+      return false;
+    }
+
+    try
+    {
+      _context.Bookings.Add(booking);
+      var result = await _context.SaveChangesAsync();
+
+      return result > 0;
+    }
+    catch (DbUpdateException ex)
+    {
+      Console.WriteLine($"Error caught {ex.Message} - SaveChangesAsync failed");
+      return false;
+    }
+  }
+
   public virtual async Task<Booking?> GetBookingById(int bookingId)
   {
     if (!await _context.Bookings.AnyAsync(b => b.BookingId == bookingId))

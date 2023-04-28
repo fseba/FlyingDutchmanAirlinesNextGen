@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 
-using FlyingDutchmanAirlines.DatabaseLayer.Models;
-using FlyingDutchmanAirlines.RepositoryLayer;
-using FlyingDutchmanAirlines.Views;
+using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
+using FlyingDutchmanAirlines.InfrastuctureLayer;
+using FlyingDutchmanAirlines.DTOs;
 
 namespace FlyingDutchmanAirlines.ServiceLayer;
 
@@ -55,7 +55,9 @@ public class BookingService : IBookingService
       }
     }
 
-    return await _bookingRepository.CreateBooking(customer.CustomerId, flightNumber);
+    var newBooking = Booking.Create(customer.CustomerId, flightNumber);
+
+    return await _bookingRepository.AddBooking(newBooking);
   }
 
   public virtual async Task<bool> DeleteBooking(int bookingId)
