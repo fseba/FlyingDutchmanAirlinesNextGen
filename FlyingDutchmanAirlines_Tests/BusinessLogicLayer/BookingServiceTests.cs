@@ -26,7 +26,7 @@ public class BookingServiceTests
   public async Task CreateBooking_Success()
   {
     _mockBookingRepository
-      .Setup(repository => repository.CreateBooking(0, 0))
+      .Setup(repository => repository.AddBooking(It.IsAny<Booking>()))
       .ReturnsAsync(true);
 
     _mockCustomerRepository
@@ -45,6 +45,32 @@ public class BookingServiceTests
   }
 
   [TestMethod]
+  public async Task CreateBooking_Success_CustomerNotInDatabase()
+  {
+    _mockBookingRepository
+      .Setup(repository => repository.AddBooking(It.IsAny<Booking>()))
+      .ReturnsAsync(true);
+
+    _mockCustomerRepository
+      .Setup(repository => repository.GetCustomerByName("Konrad Zuse"))
+      .Returns(Task.FromResult<Customer?>(null));
+
+    _mockCustomerRepository
+      .Setup(repository => repository.AddCustomer(It.IsAny<Customer>()))
+      .ReturnsAsync(true);
+
+    _mockFlightRepository
+      .Setup(repository => repository.GetFlightByFlightNumber(0))
+      .ReturnsAsync(new Flight());
+
+    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
+
+    bool result = await service.CreateBooking("Konrad Zuse", 0);
+
+    Assert.IsTrue(result);
+  }
+
+  [TestMethod]
   [ExpectedException(typeof(ArgumentException))]
   [DataRow("", 0)]
   [DataRow(null, -1)]
@@ -54,26 +80,6 @@ public class BookingServiceTests
     BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
 
     await service.CreateBooking(customerName, flightNumber);
-  }
-
-  [TestMethod]
-  [ExpectedException(typeof(ArgumentException))]
-  public async Task CreateBooking_Failure_RepositoryException_ArgumentException()
-  {
-    _mockBookingRepository
-      .Setup(repository => repository.CreateBooking(0, 1)).Throws(new ArgumentException());
-    
-    _mockCustomerRepository
-      .Setup(repository => repository.GetCustomerByName("Galileo Galilei"))
-      .ReturnsAsync(Customer.Create("Galileo Galilei"));
-
-    _mockFlightRepository
-      .Setup(repository => repository.GetFlightByFlightNumber(1))
-      .ReturnsAsync(new Flight());
-
-    BookingService service = new(_mockCustomerRepository.Object, _mockBookingRepository.Object, _mockFlightRepository.Object);
-
-    await service.CreateBooking("Galileo Galilei", 1);
   }
 
   [TestMethod]
