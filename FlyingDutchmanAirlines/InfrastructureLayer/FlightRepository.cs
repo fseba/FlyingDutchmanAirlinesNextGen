@@ -29,7 +29,6 @@ public class FlightRepository : IFlightRepository
   {
     if (flightNumber < 0)
     {
-      Console.WriteLine($"Could not find flight in GetFlightByFlightNumber! flightNumber = {flightNumber}");
       throw new ArgumentException("Invalid flight number - Negative number");
     }
 
