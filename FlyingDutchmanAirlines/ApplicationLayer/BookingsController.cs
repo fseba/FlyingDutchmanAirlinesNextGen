@@ -12,7 +12,7 @@ namespace FlyingDutchmanAirlines.ApplicationLayer;
 [Produces("application/json")]
 public class BookingsController : ControllerBase
 {
-  private IBookingService _bookingService;
+  private readonly IBookingService _bookingService;
 
   public BookingsController(IBookingService bookingService)
   {
