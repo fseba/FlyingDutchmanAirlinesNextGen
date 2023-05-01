@@ -11,11 +11,11 @@ namespace FlyingDutchmanAirlines.ApplicationLayer;
 [Produces("application/json")]
 public class FlightsController : ControllerBase
 {
-  private readonly IFlightService _service;
+  private readonly IFlightService _flightService;
 
   public FlightsController(IFlightService service)
   {
-    _service = service;
+    _flightService = service;
   }
 
   [HttpGet]
@@ -27,7 +27,7 @@ public class FlightsController : ControllerBase
     try
     {
       Queue<FlightDTO> flights = new();
-      await foreach (FlightDTO flight in _service.GetFlights())
+      await foreach (FlightDTO flight in _flightService.GetFlights())
       {
         flights.Enqueue(flight);
       }
@@ -56,7 +56,7 @@ public class FlightsController : ControllerBase
 
     try
     {
-      var flight = await _service.GetFlightByFlightNumber(flightNumber);
+      var flight = await _flightService.GetFlightByFlightNumber(flightNumber);
 
       return flight is not null
         ? StatusCode((int)HttpStatusCode.OK, flight)
