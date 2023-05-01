@@ -25,7 +25,7 @@ public class FlightRepository : IFlightRepository
     }
   }
 
-  public virtual async Task<Flight?> GetFlightByFlightNumber(int flightNumber)
+  public async Task<Flight?> GetFlightByFlightNumber(int flightNumber)
   {
     if (flightNumber < 0)
     {
@@ -37,7 +37,7 @@ public class FlightRepository : IFlightRepository
                                  .FirstOrDefaultAsync(f => f.FlightNumber == flightNumber);
   }
 
-  public virtual async Task<Flight[]> GetFlights()
+  public async Task<Flight[]> GetFlights()
   {
     if (!_context.Flights.Any())
     {

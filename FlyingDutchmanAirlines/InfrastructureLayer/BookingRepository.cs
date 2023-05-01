@@ -25,7 +25,7 @@ public class BookingRepository : IBookingRepository
     }
   }
 
-  public virtual async Task<bool> CreateBooking(int customerId, int flightNumber)
+  public async Task<bool> CreateBooking(int customerId, int flightNumber)
   {
     var newBooking = Booking.Create(customerId, flightNumber);
 
@@ -35,7 +35,7 @@ public class BookingRepository : IBookingRepository
     return result > 0;
   }
 
-  public virtual async Task<bool> AddBooking(Booking booking)
+  public async Task<bool> AddBooking(Booking booking)
   {
     if (booking is null)
     {
@@ -56,7 +56,7 @@ public class BookingRepository : IBookingRepository
     }
   }
 
-  public virtual async Task<Booking?> GetBookingById(int bookingId)
+  public async Task<Booking?> GetBookingById(int bookingId)
   {
     if (!await _context.Bookings.AnyAsync(b => b.BookingId == bookingId))
     {
@@ -69,7 +69,7 @@ public class BookingRepository : IBookingRepository
                                   .FirstOrDefaultAsync(b => b.BookingId == bookingId);
   }
 
-  public virtual async Task<bool> DeleteBooking(int bookingId)
+  public async Task<bool> DeleteBooking(int bookingId)
   {
     if (bookingId < 0)
     {

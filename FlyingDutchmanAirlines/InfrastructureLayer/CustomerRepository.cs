@@ -24,7 +24,7 @@ public class CustomerRepository : ICustomerRepository
     }
   }
 
-  public virtual async Task<bool> AddCustomer(Customer customer)
+  public async Task<bool> AddCustomer(Customer customer)
   {
     if (customer is null)
     {
@@ -45,7 +45,7 @@ public class CustomerRepository : ICustomerRepository
     }
   }
 
-  public virtual async Task<Customer?> GetCustomerByName(string name)
+  public async Task<Customer?> GetCustomerByName(string name)
   {
     return Customer.IsInvalidCustomerName(name)
       ? null

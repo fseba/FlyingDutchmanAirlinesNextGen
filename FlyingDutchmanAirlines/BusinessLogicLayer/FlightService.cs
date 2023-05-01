@@ -25,7 +25,7 @@ public class FlightService : IFlightService
     }
   }
 
-  public virtual async IAsyncEnumerable<FlightDTO> GetFlights()
+  public async IAsyncEnumerable<FlightDTO> GetFlights()
   {
     IEnumerable<Flight> flights = await _flightRepository.GetFlights();
 
@@ -35,7 +35,7 @@ public class FlightService : IFlightService
     }
   }
 
-  public virtual async Task<FlightDTO?> GetFlightByFlightNumber(int flightNumber)
+  public async Task<FlightDTO?> GetFlightByFlightNumber(int flightNumber)
   {
     var flight = await _flightRepository.GetFlightByFlightNumber(flightNumber);
 

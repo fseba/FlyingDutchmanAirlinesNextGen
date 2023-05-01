@@ -29,7 +29,7 @@ public class BookingService : IBookingService
     }
   }
 
-  public virtual async Task<bool> CreateBooking(string customerName, int flightNumber)
+  public async Task<bool> CreateBooking(string customerName, int flightNumber)
   {
     if (string.IsNullOrWhiteSpace(customerName) || flightNumber < 0)
     {
@@ -60,7 +60,7 @@ public class BookingService : IBookingService
     return await _bookingRepository.AddBooking(newBooking);
   }
 
-  public virtual async Task<bool> DeleteBooking(int bookingId)
+  public async Task<bool> DeleteBooking(int bookingId)
   {
     if (bookingId < 0)
     {
@@ -70,7 +70,7 @@ public class BookingService : IBookingService
     return await _bookingRepository.DeleteBooking(bookingId);
   }
 
-  public virtual async Task<BookingDTO?> GetBookingById(int bookingId)
+  public async Task<BookingDTO?> GetBookingById(int bookingId)
   {
     if (bookingId < 0)
     {
@@ -89,7 +89,7 @@ public class BookingService : IBookingService
     return new BookingDTO(booking, flightView);
   }
 
-  public virtual async IAsyncEnumerable<BookingDTO?> GetBookingsByCustomerName(string customerName)
+  public async IAsyncEnumerable<BookingDTO?> GetBookingsByCustomerName(string customerName)
   {
     var customer = await _customerRepository.GetCustomerByName(customerName);
 
