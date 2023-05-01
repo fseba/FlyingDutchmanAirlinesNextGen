@@ -5,7 +5,7 @@ using FlyingDutchmanAirlines.DTOs;
 namespace FlyingDutchmanAirlines_Tests.DTOs;
 
 [TestClass]
-public class FlightViewTests
+public class FlightDTOTests
 {
   [TestMethod]
   public void Constructor_FlightView_Success()
