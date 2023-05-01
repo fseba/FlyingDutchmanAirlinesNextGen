@@ -1,6 +1,6 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 
-namespace FlyingDutchmanAirlines.RepositoryLayer
+namespace FlyingDutchmanAirlines.InfrastuctureLayer
 {
   public interface ICustomerRepository
   {

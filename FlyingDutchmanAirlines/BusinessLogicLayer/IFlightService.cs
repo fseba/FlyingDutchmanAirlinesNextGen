@@ -1,10 +1,9 @@
-﻿using FlyingDutchmanAirlines.Views;
+﻿using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines.ServiceLayer
+namespace FlyingDutchmanAirlines.BusinessLogicLayer;
+
+public interface IFlightService
 {
-  public interface IFlightService
-  {
-    Task<FlightView?> GetFlightByFlightNumber(int flightNumber);
-    IAsyncEnumerable<FlightView> GetFlights();
-  }
+  Task<FlightDTO?> GetFlightByFlightNumber(int flightNumber);
+  IAsyncEnumerable<FlightDTO> GetFlights();
 }

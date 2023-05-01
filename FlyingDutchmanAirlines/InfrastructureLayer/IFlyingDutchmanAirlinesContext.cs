@@ -1,7 +1,7 @@
-﻿using FlyingDutchmanAirlines.DatabaseLayer.Models;
+﻿using FlyingDutchmanAirlines.InfrastuctureLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FlyingDutchmanAirlines.DatabaseLayer
+namespace FlyingDutchmanAirlines.InfrastuctureLayer
 {
   public interface IFlyingDutchmanAirlinesContext
   {

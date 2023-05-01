@@ -1,12 +1,11 @@
-﻿using FlyingDutchmanAirlines.Views;
+﻿using FlyingDutchmanAirlines.DTOs;
 
-namespace FlyingDutchmanAirlines.ServiceLayer
+namespace FlyingDutchmanAirlines.BusinessLogicLayer;
+
+public interface IBookingService
 {
-  public interface IBookingService
-  {
-    Task<bool> CreateBooking(string customerName, int flightNumber);
-    Task<bool> DeleteBooking(int bookingId);
-    Task<BookingView?> GetBookingById(int bookingId);
-    IAsyncEnumerable<BookingView?> GetBookingsByCustomerName(string customerName);
-  }
+  Task<bool> CreateBooking(string customerName, int flightNumber);
+  Task<bool> DeleteBooking(int bookingId);
+  Task<BookingDTO?> GetBookingById(int bookingId);
+  IAsyncEnumerable<BookingDTO?> GetBookingsByCustomerName(string customerName);
 }
